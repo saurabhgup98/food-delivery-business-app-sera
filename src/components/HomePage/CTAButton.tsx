@@ -9,12 +9,12 @@ interface CTAButtonProps {
 }
 
 export default function CTAButton({ href, children, variant = 'primary', className = '' }: CTAButtonProps) {
-  const baseClasses = 'px-6 py-3 font-semibold rounded-lg transition-all duration-200 hover:scale-105';
+  const baseClasses = 'cta-button';
   
   const variantClasses = {
-    primary: 'bg-sera-yellow text-dark-900 hover:bg-sera-yellow/90',
-    secondary: 'bg-sera-blue text-white hover:bg-sera-blue/90',
-    outline: 'border-2 border-sera-yellow text-sera-yellow hover:bg-sera-yellow hover:text-dark-900'
+    primary: 'cta-primary',
+    secondary: 'cta-secondary',
+    outline: 'cta-outline'
   };
 
   return (

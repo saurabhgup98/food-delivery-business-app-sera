@@ -6,7 +6,14 @@ import Footer from './Footer';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div 
+      className="min-h-screen bg-dark-900"
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#0F172A',
+        color: 'white'
+      }}
+    >
       <HeroSection />
       <FeaturesSection />
       <AdminAccessSection />
