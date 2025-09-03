@@ -9,16 +9,15 @@ interface FeatureCardProps {
 
 export default function FeatureCard({ icon, title, description, bgColor }: FeatureCardProps) {
   return (
-    <div className="text-center p-6 group hover:scale-105 transition-transform duration-300">
-      <div className={`w-16 h-16 ${bgColor} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:shadow-lg transition-shadow duration-300`}>
-        <span className="text-2xl">{icon}</span>
+    <div className="sera-feature-card sera-fade-in">
+      <div 
+        className="sera-feature-icon"
+        style={{ backgroundColor: bgColor }}
+      >
+        {icon}
       </div>
-      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-sera-yellow transition-colors duration-300">
-        {title}
-      </h3>
-      <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
-        {description}
-      </p>
+      <h3 className="sera-feature-title">{title}</h3>
+      <p className="sera-feature-desc">{description}</p>
     </div>
   );
 }

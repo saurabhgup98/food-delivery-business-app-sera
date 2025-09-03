@@ -9,12 +9,12 @@ interface CTAButtonProps {
 }
 
 export default function CTAButton({ href, children, variant = 'primary', className = '' }: CTAButtonProps) {
-  const baseClasses = 'cta-button';
+  const baseClasses = 'sera-btn';
   
   const variantClasses = {
-    primary: 'cta-primary',
-    secondary: 'cta-secondary',
-    outline: 'cta-outline'
+    primary: 'sera-btn-primary',
+    secondary: 'sera-btn-secondary',
+    outline: 'sera-btn-outline'
   };
 
   return (
