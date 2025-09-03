@@ -4,13 +4,13 @@ import { features } from '@/data/homePageData';
 
 export default function FeaturesSection() {
   return (
-    <section className="sera-section-alt">
-      <div className="sera-container">
-        <h2 className="sera-heading sera-fade-in">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-dark-800">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold text-white text-center mb-12">
           Why Choose SERA?
         </h2>
         
-        <div className="sera-grid sera-grid-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}

@@ -6,7 +6,7 @@ import Footer from './Footer';
 
 export default function HomePage() {
   return (
-    <div className="sera-hero">
+    <div className="min-h-screen bg-dark-900">
       <HeroSection />
       <FeaturesSection />
       <AdminAccessSection />
