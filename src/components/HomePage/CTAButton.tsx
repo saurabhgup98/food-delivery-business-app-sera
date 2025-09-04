@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 
 interface CTAButtonProps {
   href: string;
@@ -18,11 +17,11 @@ export default function CTAButton({ href, children, variant = 'primary', classNa
   };
 
   return (
-    <Link 
+    <a 
       href={href} 
       className={`${baseClasses} ${variantClasses[variant]} ${className}`}
     >
       {children}
-    </Link>
+    </a>
   );
 }

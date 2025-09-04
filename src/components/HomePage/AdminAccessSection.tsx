@@ -1,6 +1,5 @@
-import React from 'react';
 import CTAButton from './CTAButton';
-import { adminAccessData } from '@/data/homePageData';
+import { adminAccessData } from '../../data/homePageData';
 
 export default function AdminAccessSection() {
   return (

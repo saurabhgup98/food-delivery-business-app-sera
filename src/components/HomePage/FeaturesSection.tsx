@@ -1,6 +1,5 @@
-import React from 'react';
 import FeatureCard from './FeatureCard';
-import { features } from '@/data/homePageData';
+import { features } from '../../data/homePageData';
 
 export default function FeaturesSection() {
   return (

@@ -1,6 +1,5 @@
-import React from 'react';
 import CTAButton from './CTAButton';
-import { heroData } from '@/data/homePageData';
+import { heroData } from '../../data/homePageData';
 
 export default function HeroSection() {
   return (
