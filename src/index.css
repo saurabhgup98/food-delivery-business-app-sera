@@ -30,6 +30,31 @@ body {
   padding: 0;
 }
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sera-pink) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--sera-pink), var(--sera-orange));
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--sera-orange), var(--sera-yellow));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 /* SERA Brand Color Utilities */
 @layer utilities {
   .bg-sera-pink { background-color: var(--sera-pink); }
@@ -127,32 +152,29 @@ body {
 /* Custom Scrollbar */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-color: var(--sera-pink) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Enhanced scrollbar for SERA theme */
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--sera-pink), var(--sera-orange));
-  border-radius: 3px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, var(--sera-orange), var(--sera-yellow));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
 }

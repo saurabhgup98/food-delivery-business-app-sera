@@ -33,54 +33,54 @@ export interface AdminAccessData {
 
 export const heroData: HeroData = {
   title: "Welcome to SERA Business",
-  subtitle: "Empowering Restaurant Owners with Smart Management Solutions",
+  subtitle: "Empowering Restaurant Owners & Platform Administrators with Smart Management Solutions",
   primaryCTA: {
-    text: "Login",
-    href: "/login"
+    text: "Explore Features",
+    href: "#features"
   },
   secondaryCTA: {
-    text: "Register",
-    href: "/register"
+    text: "See How It Works",
+    href: "#user-types"
   }
 };
 
 export const features: Feature[] = [
   {
-    icon: '📱',
-    title: 'Easy Management',
-    description: 'Manage orders, menus, and staff effortlessly',
+    icon: '🏪',
+    title: 'Restaurant Management',
+    description: 'Complete control over your restaurant operations, menu management, and staff coordination',
     bgColor: 'bg-sera-blue/20'
   },
   {
     icon: '📊',
-    title: 'Analytics',
-    description: 'Track performance and growth insights',
+    title: 'Business Analytics',
+    description: 'Real-time insights into sales, customer behavior, and performance metrics',
     bgColor: 'bg-sera-orange/20'
   },
   {
     icon: '💳',
-    title: 'Payments',
-    description: 'Secure and fast payment processing',
+    title: 'Payment Processing',
+    description: 'Secure, fast, and reliable payment solutions for all transactions',
     bgColor: 'bg-sera-pink/20'
   },
   {
     icon: '🚚',
-    title: 'Delivery',
-    description: 'Seamless delivery integration',
+    title: 'Delivery Network',
+    description: 'Integrated delivery management with real-time tracking and optimization',
     bgColor: 'bg-sera-yellow/20'
   }
 ];
 
 export const adminAccessData: AdminAccessData = {
-  title: "Admin Portal Access",
-  description: "Already have an account? Access your dashboard to manage restaurants, users, and payments.",
+  title: "Ready to Get Started?",
+  description: "Join thousands of restaurant owners who trust SERA Business to power their operations. Get started today with our comprehensive platform.",
   primaryCTA: {
-    text: "Go to Dashboard",
-    href: "/dashboard"
+    text: "Start Your Journey",
+    href: "#contact"
   },
   secondaryCTA: {
-    text: "Admin Login",
-    href: "/login"
+    text: "View Pricing",
+    href: "#pricing"
   }
 };
 

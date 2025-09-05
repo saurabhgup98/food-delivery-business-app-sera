@@ -16,11 +16,13 @@ import { useAuth } from '../../contexts/AuthContext';
 interface HeaderProps {
   onSearch?: (query: string) => void;
   onNavClick?: (pageName: string) => void;
+  currentPage?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   onSearch,
-  onNavClick 
+  onNavClick,
+  currentPage = 'home'
 }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -95,7 +97,10 @@ const Header: React.FC<HeaderProps> = ({
 
               {/* Desktop Navigation - Using PrimaryHorizontalNavbar */}
               <PrimaryHorizontalNavbar 
-                navigationItems={headerData.navigationItems}
+                navigationItems={headerData.navigationItems.map(item => ({
+                  ...item,
+                  isActive: item.name.toLowerCase() === currentPage
+                }))}
                 onNavClick={handleNavClick}
               />
             </div>
@@ -174,13 +179,15 @@ const Header: React.FC<HeaderProps> = ({
           {isMobileMenuOpen && (
             <div className="md:hidden pb-4 border-t border-white/20 bg-gradient-to-r from-sera-pink to-sera-orange -mx-4 sm:-mx-2 lg:-mx-12 px-4 sm:px-2 lg:px-12">
               <nav className="flex flex-col space-y-1 pt-4">
-                {headerData.navigationItems.map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => { handleNavClick(item.name); setIsMobileMenuOpen(false); }}
-                    className={`flex items-center space-x-3 px-4 py-3 text-white font-medium transition-all duration-300 hover:bg-white/10 rounded-lg group ${item.isActive ? 'bg-sera-yellow/20 text-sera-yellow' : 'text-white/90'}`}
-                  >
-                    <div className={`w-6 h-6 flex items-center justify-center rounded-lg transition-all duration-300 ${item.isActive ? 'bg-sera-yellow text-dark-900' : 'bg-white/10 text-white group-hover:bg-sera-yellow group-hover:text-dark-900'}`}>
+                {headerData.navigationItems.map((item) => {
+                  const isActive = item.name.toLowerCase() === currentPage;
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => { handleNavClick(item.name); setIsMobileMenuOpen(false); }}
+                      className={`flex items-center space-x-3 px-4 py-3 text-white font-medium transition-all duration-300 hover:bg-white/10 rounded-lg group ${isActive ? 'bg-sera-yellow/20 text-sera-yellow' : 'text-white/90'}`}
+                    >
+                    <div className={`w-6 h-6 flex items-center justify-center rounded-lg transition-all duration-300 ${isActive ? 'bg-sera-yellow text-dark-900' : 'bg-white/10 text-white group-hover:bg-sera-yellow group-hover:text-dark-900'}`}>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
@@ -196,11 +203,12 @@ const Header: React.FC<HeaderProps> = ({
                         </span>
                       </div>
                     )}
-                    {item.isActive && (
+                    {isActive && (
                       <div className="w-2 h-2 bg-sera-yellow rounded-full animate-pulse"></div>
                     )}
                   </button>
-                ))}
+                  );
+                })}
               </nav>
             </div>
           )}

@@ -108,13 +108,14 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ top: '80px' }}>
       {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
           isAnimating ? 'opacity-100' : 'opacity-0'
         }`}
         onClick={handleClose}
+        style={{ top: '-80px' }}
       ></div>
       
       {/* Modal Container */}

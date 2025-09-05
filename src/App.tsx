@@ -34,12 +34,12 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-dark-900">
+      <div className="min-h-screen bg-dark-900 custom-scrollbar">
         {/* Header - Common for all pages */}
-        <Header onSearch={handleSearch} onNavClick={handleNavClick} />
+        <Header onSearch={handleSearch} onNavClick={handleNavClick} currentPage={currentPage} />
         
         {/* Main Content */}
-        <main>
+        <main className="custom-scrollbar">
           {renderCurrentPage()}
         </main>
       </div>
