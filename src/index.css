@@ -3,43 +3,50 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0f0f23;
+  --foreground: #ffffff;
+  
+  /* SERA Brand Colors */
+  --sera-pink: #ff6b6b;
+  --sera-orange: #ff8e3c;
+  --sera-yellow: #ffd93d;
+  --sera-blue: #4ecdc4;
+  
+  /* Dark Theme Colors */
+  --dark-900: #0f0f23;
+  --dark-800: #1a1a2e;
+  --dark-700: #16213e;
+  --dark-600: #0f3460;
+  --dark-500: #1e3a8a;
+  --dark-400: #3b82f6;
+  --dark-300: #60a5fa;
 }
 
 body {
-  background: var(--background);
+  background: var(--dark-900);
   color: var(--foreground);
   font-family: 'Inter', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-/* Custom colors for SERA Food Delivery */
-@layer base {
-  :root {
-    --dark-900: #0f0f23;
-    --dark-800: #1a1a2e;
-    --dark-700: #16213e;
-    --dark-600: #0f3460;
-    --dark-500: #1e3a8a;
-    --dark-400: #3b82f6;
-    --dark-300: #60a5fa;
-    
-    /* SERA Brand Colors */
-    --sera-pink: #ff6b6b;
-    --sera-orange: #ff8e3c;
-    --sera-yellow: #ffd93d;
-    --sera-blue: #4ecdc4;
-  }
-}
-
+/* SERA Brand Color Utilities */
 @layer utilities {
+  .bg-sera-pink { background-color: var(--sera-pink); }
+  .bg-sera-orange { background-color: var(--sera-orange); }
+  .bg-sera-yellow { background-color: var(--sera-yellow); }
+  .bg-sera-blue { background-color: var(--sera-blue); }
+  
+  .text-sera-pink { color: var(--sera-pink); }
+  .text-sera-orange { color: var(--sera-orange); }
+  .text-sera-yellow { color: var(--sera-yellow); }
+  .text-sera-blue { color: var(--sera-blue); }
+  
+  .border-sera-pink { border-color: var(--sera-pink); }
+  .border-sera-orange { border-color: var(--sera-orange); }
+  .border-sera-yellow { border-color: var(--sera-yellow); }
+  .border-sera-blue { border-color: var(--sera-blue); }
+  
   .bg-dark-900 { background-color: var(--dark-900); }
   .bg-dark-800 { background-color: var(--dark-800); }
   .bg-dark-700 { background-color: var(--dark-700); }
@@ -52,4 +59,100 @@ body {
   .text-dark-300 { color: var(--dark-300); }
   .border-dark-600 { border-color: var(--dark-600); }
   .border-dark-400 { border-color: var(--dark-400); }
+}
+
+/* Custom Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced scrollbar for SERA theme */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--sera-pink), var(--sera-orange));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--sera-orange), var(--sera-yellow));
 }
