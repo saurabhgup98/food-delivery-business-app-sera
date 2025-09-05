@@ -3,7 +3,6 @@ import {
   MenuIcon,
   XIcon
 } from '../Icons';
-import AuthModals from '../Auth/AuthModals';
 import { PrimarySolidBtn, buttonData } from '../Buttons';
 import PrimaryHorizontalNavbar from './PrimaryHorizontalNavbar';
 import { headerData } from './headerData';
@@ -17,17 +16,27 @@ interface HeaderProps {
   onSearch?: (query: string) => void;
   onNavClick?: (pageName: string) => void;
   currentPage?: string;
+  showAuthModal?: boolean;
+  setShowAuthModal?: (show: boolean) => void;
+  authMode?: 'login' | 'register';
+  setAuthMode?: (mode: 'login' | 'register') => void;
+  onAuthSuccess?: () => void;
+  onModeChange?: (mode: 'login' | 'register') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
   onSearch,
   onNavClick,
-  currentPage = 'home'
+  currentPage = 'home',
+  showAuthModal = false,
+  setShowAuthModal,
+  authMode = 'login',
+  setAuthMode,
+  onAuthSuccess,
+  onModeChange
 }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   const handleSearch = (query: string) => {
     alert(`Search: ${query}`);
@@ -43,21 +52,13 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleLogin = () => {
-    setAuthMode('login');
-    setShowAuthModal(true);
+    setAuthMode?.('login');
+    setShowAuthModal?.(true);
   };
 
   const handleRegister = () => {
-    setAuthMode('register');
-    setShowAuthModal(true);
-  };
-
-  const handleAuthSuccess = () => {
-    setShowAuthModal(false);
-  };
-
-  const handleModeChange = (mode: 'login' | 'register') => {
-    setAuthMode(mode);
+    setAuthMode?.('register');
+    setShowAuthModal?.(true);
   };
 
   // Debug effect to log authentication state changes
@@ -90,93 +91,102 @@ const Header: React.FC<HeaderProps> = ({
 
         <div className="relative max-w-full mx-auto px-4 sm:px-2 lg:px-12">
           <div className="flex justify-between items-center h-20">
-            {/* Left Side - Logo, Brand Name, and Navigation */}
-            <div className="flex items-center space-x-6">
+            {/* Left Side - Logo and Brand */}
+            <div className="flex items-center">
               {/* Logo and Brand - Using Logo Component */}
               <Logo onClick={() => alert('SERA BUSINESS clicked!')} />
-
-              {/* Desktop Navigation - Using PrimaryHorizontalNavbar */}
-              <PrimaryHorizontalNavbar 
-                navigationItems={headerData.navigationItems.map(item => ({
-                  ...item,
-                  isActive: item.name.toLowerCase() === currentPage
-                }))}
-                onNavClick={handleNavClick}
-              />
             </div>
 
-            {/* Right Side - Search Bar and Actions */}
-            <div className="flex items-center space-x-4">
-              {/* Action Buttons */}
+            {/* Right Side - Conditional Content Based on Auth Status */}
+            {!isAuthenticated ? (
+              /* Non-logged User: Show only Login/Register buttons */
               <div className="flex items-center space-x-2">
-                {/* Search Bar - Using PrimarySearchBar Component */}
-                <div className="hidden lg:flex w-64">
-                  <PrimarySearchBar
-                    placeholder={headerData.searchPlaceholder}
-                    onSearch={handleSearch}
+                <PrimarySolidBtn 
+                  btnProps={buttonData.LoginBtnProps}
+                  onClick={handleLogin}
+                />
+                <PrimarySolidBtn 
+                  btnProps={buttonData.RegisterBtnProps}
+                  onClick={handleRegister}
+                />
+              </div>
+            ) : (
+              /* Logged User: Show full header with navigation, search, notifications, and profile */
+              <>
+                {/* Left Side - Navigation (for logged users) */}
+                <div className="flex items-center space-x-6">
+                  {/* Desktop Navigation - Using PrimaryHorizontalNavbar */}
+                  <PrimaryHorizontalNavbar 
+                    navigationItems={headerData.navigationItems.map(item => ({
+                      ...item,
+                      isActive: item.name.toLowerCase() === currentPage
+                    }))}
+                    onNavClick={handleNavClick}
                   />
                 </div>
 
-                {/* Notifications - Using NotificationsDropdown Component */}
-                <NotificationsDropdown
-                  notificationCount={headerData.notificationCount}
-                  isLoggedIn={isAuthenticated}
-                  onAuthRequired={() => {
-                    setAuthMode('login');
-                    setShowAuthModal(true);
-                  }}
-                />
-
-                {/* Auth Buttons or Profile */}
-                {!isAuthenticated ? (
+                {/* Right Side - Search Bar, Notifications, and Profile */}
+                <div className="flex items-center space-x-4">
+                  {/* Action Buttons */}
                   <div className="flex items-center space-x-2">
-                    <PrimarySolidBtn 
-                      btnProps={buttonData.LoginBtnProps}
-                      onClick={handleLogin}
+                    {/* Search Bar - Using PrimarySearchBar Component */}
+                    <div className="hidden lg:flex w-64">
+                      <PrimarySearchBar
+                        placeholder={headerData.searchPlaceholder}
+                        onSearch={handleSearch}
+                      />
+                    </div>
+
+                    {/* Notifications - Using NotificationsDropdown Component */}
+                    <NotificationsDropdown
+                      notificationCount={headerData.notificationCount}
+                      isLoggedIn={isAuthenticated}
+                      onAuthRequired={() => {
+                        setAuthMode?.('login');
+                        setShowAuthModal?.(true);
+                      }}
                     />
-                    <PrimarySolidBtn 
-                      btnProps={buttonData.RegisterBtnProps}
-                      onClick={handleRegister}
+
+                    {/* Admin Profile - Using AdminProfile Component */}
+                    <AdminProfile
+                      adminUser={{
+                        name: user?.name || 'User',
+                        email: user?.email || 'user@example.com',
+                        avatar: '',
+                        role: 'admin'
+                      }}
+                      onLogout={handleLogout}
                     />
+
+                    {/* Mobile Menu Button */}
+                    <button
+                      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                      className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-105"
+                    >
+                      {isMobileMenuOpen ? (
+                        <XIcon className="w-5 h-5" />
+                      ) : (
+                        <MenuIcon className="w-5 h-5" />
+                      )}
+                    </button>
                   </div>
-                ) : (
-                  /* Admin Profile - Using AdminProfile Component */
-                  <AdminProfile
-                    adminUser={{
-                      name: user?.name || 'User',
-                      email: user?.email || 'user@example.com',
-                      avatar: '',
-                      role: 'admin'
-                    }}
-                    onLogout={handleLogout}
-                  />
-                )}
+                </div>
+              </>
+            )}
+          </div>
 
-                {/* Mobile Menu Button */}
-                <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-105"
-                >
-                  {isMobileMenuOpen ? (
-                    <XIcon className="w-5 h-5" />
-                  ) : (
-                    <MenuIcon className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
+          {/* Mobile Search Bar - Only for logged users */}
+          {isAuthenticated && (
+            <div className="lg:hidden pb-4">
+              <PrimarySearchBar
+                placeholder={headerData.searchPlaceholder}
+                onSearch={handleSearch}
+              />
             </div>
-          </div>
+          )}
 
-          {/* Mobile Search Bar */}
-          <div className="lg:hidden pb-4">
-            <PrimarySearchBar
-              placeholder={headerData.searchPlaceholder}
-              onSearch={handleSearch}
-            />
-          </div>
-
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
+          {/* Mobile Menu - Only for logged users */}
+          {isAuthenticated && isMobileMenuOpen && (
             <div className="md:hidden pb-4 border-t border-white/20 bg-gradient-to-r from-sera-pink to-sera-orange -mx-4 sm:-mx-2 lg:-mx-12 px-4 sm:px-2 lg:px-12">
               <nav className="flex flex-col space-y-1 pt-4">
                 {headerData.navigationItems.map((item) => {
@@ -215,14 +225,6 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
-      {/* Auth Modals */}
-      <AuthModals
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        mode={authMode}
-        onModeChange={handleModeChange}
-        onSuccess={handleAuthSuccess}
-      />
     </>
   );
 };

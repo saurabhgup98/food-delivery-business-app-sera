@@ -1,7 +1,10 @@
-import CTAButton from './CTAButton';
 import { adminAccessData } from '../../data/homePageData';
 
-export default function AdminAccessSection() {
+interface AdminAccessSectionProps {
+  onRegisterClick?: () => void;
+}
+
+export default function AdminAccessSection({ onRegisterClick }: AdminAccessSectionProps) {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Elements */}
@@ -29,17 +32,26 @@ export default function AdminAccessSection() {
         </p>
         
         {/* Enhanced CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-          <CTAButton href={adminAccessData.primaryCTA.href} variant="secondary">
-            {adminAccessData.primaryCTA.text}
-          </CTAButton>
-          <CTAButton 
-            href={adminAccessData.secondaryCTA.href} 
-            variant="outline" 
-            className="border-sera-blue text-sera-blue hover:bg-sera-blue hover:text-white"
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+          <button 
+            onClick={onRegisterClick}
+            className="px-8 py-3 font-semibold rounded-lg transition-all duration-200 bg-sera-blue text-white hover:bg-sera-blue/90"
           >
-            {adminAccessData.secondaryCTA.text}
-          </CTAButton>
+            {adminAccessData.primaryCTA.text}
+          </button>
+          <div className="relative group">
+            <button 
+              disabled
+              className="px-8 py-3 font-semibold rounded-lg transition-all duration-200 border-2 border-gray-500 text-gray-500 cursor-not-allowed opacity-50"
+            >
+              {adminAccessData.secondaryCTA.text}
+            </button>
+            {/* Tooltip */}
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+              Coming Soon
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+            </div>
+          </div>
         </div>
 
         {/* Trust Indicators */}

@@ -76,7 +76,7 @@ export const adminAccessData: AdminAccessData = {
   description: "Join thousands of restaurant owners who trust SERA Business to power their operations. Get started today with our comprehensive platform.",
   primaryCTA: {
     text: "Start Your Journey",
-    href: "#contact"
+    href: "#register"
   },
   secondaryCTA: {
     text: "View Pricing",

@@ -1,7 +1,11 @@
 import CTAButton from './CTAButton';
 import { heroData } from '../../data/homePageData';
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  onRegisterClick?: () => void;
+}
+
+export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Animated Background Elements */}
@@ -39,9 +43,12 @@ export default function HeroSection() {
         
         {/* Enhanced CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-800">
-          <CTAButton href={heroData.primaryCTA.href} variant="primary">
-            {heroData.primaryCTA.text}
-          </CTAButton>
+          <button 
+            onClick={onRegisterClick}
+            className="px-8 py-3 font-semibold rounded-lg transition-all duration-200 bg-sera-yellow text-dark-900 hover:bg-sera-yellow/90"
+          >
+            Get Started
+          </button>
           <CTAButton href={heroData.secondaryCTA.href} variant="outline">
             {heroData.secondaryCTA.text}
           </CTAButton>
