@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { XIcon } from '../Icons';
+import { useAuth } from '../../contexts/AuthContext';
+import { LoginRequest, RegisterRequest } from '../../types';
 
 interface AuthModalsProps {
   isOpen: boolean;
@@ -10,6 +12,7 @@ interface AuthModalsProps {
 }
 
 export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSuccess }: AuthModalsProps) {
+  const { login, register, isLoading, error, clearError } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -19,12 +22,15 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
     password: '',
     confirmPassword: ''
   });
+  const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
+      clearError();
+      setLocalError(null);
     }
-  }, [isOpen]);
+  }, [isOpen, clearError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -33,27 +39,56 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLocalError(null);
+    clearError();
+
+    // Validation
     if (mode === 'register' && formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
+      setLocalError('Passwords do not match!');
       return;
     }
-    console.log('Form submitted:', formData);
-    if (onSuccess) {
-      onSuccess();
+
+    if (mode === 'register' && formData.password.length < 8) {
+      setLocalError('Password must be at least 8 characters long');
+      return;
     }
-    onClose();
+
+    try {
+      if (mode === 'login') {
+        const loginData: LoginRequest = {
+          email: formData.email,
+          password: formData.password,
+        };
+        await login(loginData);
+      } else {
+        const registerData: RegisterRequest = {
+          name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+        };
+        await register(registerData);
+      }
+
+      // Success - close modal and call success callback
+      if (onSuccess) {
+        onSuccess();
+      }
+      onClose();
+    } catch (error: any) {
+      setLocalError(error.message || 'Authentication failed');
+    }
   };
 
   const handleOAuthLogin = (provider: 'google' | 'facebook') => {
-    console.log(`${provider} OAuth login`);
-    // Implement OAuth logic here
-    if (onSuccess) {
-      onSuccess();
-    }
-    // Don't close immediately - let the success handler manage the close
-    // onClose();
+    // Redirect to OAuth provider
+    const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'https://your-auth-backend.vercel.app';
+    const authUrl = provider === 'google' 
+      ? `${baseUrl}/api/oauth/google`
+      : `${baseUrl}/api/oauth/facebook`;
+    
+    window.location.href = authUrl;
   };
 
   const handleClose = () => {
@@ -124,6 +159,15 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
           {/* Scrollable Form Content */}
           <div className="flex-1 overflow-y-auto">
             <div className="p-6">
+              {/* Error Display */}
+              {(error || localError) && (
+                <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                  <p className="text-red-400 text-sm font-medium">
+                    {error || localError}
+                  </p>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 {mode === 'register' && (
                   <div>
@@ -210,9 +254,17 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
                 {/* Enhanced Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-sera-blue via-sera-blue/90 to-sera-blue/80 text-white font-bold py-3 px-6 rounded-xl hover:from-sera-blue/90 hover:via-sera-blue/80 hover:to-sera-blue/70 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-sera-blue/20 hover:scale-[1.02] text-sm tracking-wide"
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-sera-blue via-sera-blue/90 to-sera-blue/80 text-white font-bold py-3 px-6 rounded-xl hover:from-sera-blue/90 hover:via-sera-blue/80 hover:to-sera-blue/70 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-sera-blue/20 hover:scale-[1.02] text-sm tracking-wide disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  {mode === 'login' ? 'Sign In' : 'Create Account'}
+                  {isLoading ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>{mode === 'login' ? 'Signing In...' : 'Creating Account...'}</span>
+                    </div>
+                  ) : (
+                    mode === 'login' ? 'Sign In' : 'Create Account'
+                  )}
                 </button>
               </form>
 

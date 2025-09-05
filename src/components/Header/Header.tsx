@@ -11,6 +11,7 @@ import Logo from './Logo';
 import PrimarySearchBar from './PrimarySearchBar';
 import NotificationsDropdown from './NotificationsDropdown';
 import AdminProfile from './AdminProfile';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -21,8 +22,8 @@ const Header: React.FC<HeaderProps> = ({
   onSearch,
   onNavClick 
 }) => {
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
@@ -31,9 +32,12 @@ const Header: React.FC<HeaderProps> = ({
     onSearch?.(query);
   };
 
-  const handleLogout = () => {
-    alert('Logout clicked!');
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   const handleLogin = () => {
@@ -47,7 +51,6 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleAuthSuccess = () => {
-    setIsLoggedIn(true);
     setShowAuthModal(false);
   };
 
@@ -55,23 +58,10 @@ const Header: React.FC<HeaderProps> = ({
     setAuthMode(mode);
   };
 
-  // Check localStorage on component mount
+  // Debug effect to log authentication state changes
   useEffect(() => {
-    const loginStatus = localStorage.getItem('isLoggedIn');
-    console.log('Header mounted, localStorage loginStatus:', loginStatus);
-    if (loginStatus === 'true') {
-      console.log('Setting isLoggedIn to true');
-      setIsLoggedIn(true);
-    } else {
-      console.log('Setting isLoggedIn to false');
-      setIsLoggedIn(false);
-    }
-  }, []);
-
-  // Debug effect to log state changes
-  useEffect(() => {
-    console.log('Header isLoggedIn state changed to:', isLoggedIn);
-  }, [isLoggedIn]);
+    console.log('Header authentication state changed:', { isAuthenticated, user });
+  }, [isAuthenticated, user]);
 
   const handleNavClick = (itemName: string) => {
     // Call the parent component's navigation handler
@@ -125,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({
                 {/* Notifications - Using NotificationsDropdown Component */}
                 <NotificationsDropdown
                   notificationCount={headerData.notificationCount}
-                  isLoggedIn={isLoggedIn}
+                  isLoggedIn={isAuthenticated}
                   onAuthRequired={() => {
                     setAuthMode('login');
                     setShowAuthModal(true);
@@ -133,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({
                 />
 
                 {/* Auth Buttons or Profile */}
-                {!isLoggedIn ? (
+                {!isAuthenticated ? (
                   <div className="flex items-center space-x-2">
                     <PrimarySolidBtn 
                       btnProps={buttonData.LoginBtnProps}
@@ -147,7 +137,12 @@ const Header: React.FC<HeaderProps> = ({
                 ) : (
                   /* Admin Profile - Using AdminProfile Component */
                   <AdminProfile
-                    adminUser={headerData.adminUser}
+                    adminUser={{
+                      name: user?.name || 'User',
+                      email: user?.email || 'user@example.com',
+                      avatar: '',
+                      role: 'admin'
+                    }}
                     onLogout={handleLogout}
                   />
                 )}

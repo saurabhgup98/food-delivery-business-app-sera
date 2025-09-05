@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Header from './components/Header/Header';
 import HomePage from './components/HomePage/HomePage';
 import { Dashboard, Restaurants, Users, Payments } from './components/Pages';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -32,15 +33,17 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-dark-900">
-      {/* Header - Common for all pages */}
-      <Header onSearch={handleSearch} onNavClick={handleNavClick} />
-      
-      {/* Main Content */}
-      <main>
-        {renderCurrentPage()}
-      </main>
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen bg-dark-900">
+        {/* Header - Common for all pages */}
+        <Header onSearch={handleSearch} onNavClick={handleNavClick} />
+        
+        {/* Main Content */}
+        <main>
+          {renderCurrentPage()}
+        </main>
+      </div>
+    </AuthProvider>
   );
 }
 

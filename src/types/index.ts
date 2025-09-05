@@ -64,3 +64,42 @@ export interface AdminAccessData {
     href: string;
   };
 }
+
+// Authentication types
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  oauthProvider?: 'google' | 'facebook' | 'github' | 'local';
+}
+
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  message: string;
+  data: {
+    user: User;
+    tokens: AuthTokens;
+  };
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface ApiError {
+  success: false;
+  error: string;
+}
