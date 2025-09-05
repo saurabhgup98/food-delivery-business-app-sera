@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function UserTypesSection() {
   return (
     <section id="user-types" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-dark-800 via-dark-700 to-dark-800 relative overflow-hidden">

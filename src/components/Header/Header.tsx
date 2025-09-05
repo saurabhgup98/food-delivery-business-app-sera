@@ -28,12 +28,8 @@ const Header: React.FC<HeaderProps> = ({
   onSearch,
   onNavClick,
   currentPage = 'home',
-  showAuthModal = false,
   setShowAuthModal,
-  authMode = 'login',
-  setAuthMode,
-  onAuthSuccess,
-  onModeChange
+  setAuthMode
 }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
