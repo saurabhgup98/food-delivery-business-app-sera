@@ -62,7 +62,7 @@ class ActivitiesApiClient {
           pages: number;
         };
       };
-    }>(`/api/activities/admin?page=${page}&limit=${limit}`, {
+    }>(`/admin?page=${page}&limit=${limit}`, {
       method: 'GET',
     });
 
@@ -95,7 +95,7 @@ class ActivitiesApiClient {
           pages: number;
         };
       };
-    }>(`/api/activities/restaurant/${restaurantId}?page=${page}&limit=${limit}`, {
+    }>(`/restaurant/${restaurantId}?page=${page}&limit=${limit}`, {
       method: 'GET',
     });
 
@@ -128,7 +128,7 @@ class ActivitiesApiClient {
           latest: string;
         }>;
       };
-    }>(`/api/activities/stats?${params.toString()}`, {
+    }>(`/stats?${params.toString()}`, {
       method: 'GET',
     });
 
