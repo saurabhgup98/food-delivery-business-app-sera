@@ -1,7 +1,7 @@
 import { AuthResponse, LoginRequest, RegisterRequest, AuthTokens } from '../types';
 
 // API Configuration
-const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'https://your-auth-backend.vercel.app';
+const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-auth-service.vercel.app';
 const API_ENDPOINTS = {
   register: '/api/auth/register',
   login: '/api/auth/login',
