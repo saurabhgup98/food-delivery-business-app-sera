@@ -2,6 +2,8 @@ import { AuthResponse, LoginRequest, RegisterRequest, AuthTokens } from '../type
 
 // API Configuration
 const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-auth-service.vercel.app';
+console.log('API_BASE_URL:', API_BASE_URL);
+console.log('Environment variable:', (import.meta as any).env?.VITE_API_BASE_URL);
 const API_ENDPOINTS = {
   register: '/api/auth/register',
   login: '/api/auth/login',
@@ -26,6 +28,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
+    console.log('Making request to:', url);
     
     const config: RequestInit = {
       headers: {
