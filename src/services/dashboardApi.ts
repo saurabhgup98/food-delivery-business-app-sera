@@ -1,7 +1,7 @@
 import { MetricCard } from '../data/dashboardData';
 
 // Dashboard API Configuration
-const DASHBOARD_API_BASE_URL = 'https://food-delivery-business-app-sera-bac.vercel.app'; // Vercel backend URL
+const DASHBOARD_API_BASE_URL = 'https://food-delivery-business-app-sera-backend-e70owjhmh.vercel.app'; // Vercel backend URL
 
 // Dashboard API Client
 class DashboardApiClient {

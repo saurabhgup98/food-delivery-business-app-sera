@@ -1,7 +1,7 @@
 import { Activity } from '../types/activities';
 
 // Activities API Configuration
-const ACTIVITIES_API_BASE_URL = 'https://food-delivery-business-app-sera-backend-apiy81evo.vercel.app';
+const ACTIVITIES_API_BASE_URL = 'https://food-delivery-business-app-sera-backend-e70owjhmh.vercel.app';
 
 // Activities API Client
 class ActivitiesApiClient {
@@ -62,7 +62,7 @@ class ActivitiesApiClient {
           pages: number;
         };
       };
-    }>(`/admin?page=${page}&limit=${limit}`, {
+    }>(`/api/activities/admin?page=${page}&limit=${limit}`, {
       method: 'GET',
     });
 
@@ -95,7 +95,7 @@ class ActivitiesApiClient {
           pages: number;
         };
       };
-    }>(`/restaurant/${restaurantId}?page=${page}&limit=${limit}`, {
+    }>(`/api/activities/restaurant/${restaurantId}?page=${page}&limit=${limit}`, {
       method: 'GET',
     });
 
@@ -128,7 +128,7 @@ class ActivitiesApiClient {
           latest: string;
         }>;
       };
-    }>(`/stats?${params.toString()}`, {
+    }>(`/api/activities/stats?${params.toString()}`, {
       method: 'GET',
     });
 
