@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { mockDashboardData } from '../../data/dashboardData';
+import { useDashboardData } from '../../hooks/useDashboardData';
 import LeftSection from './Dashboard/LeftSection';
 import MiddleSection from './Dashboard/MiddleSection';
 import RightSection from './Dashboard/RightSection';
@@ -9,6 +10,9 @@ const Dashboard: React.FC = () => {
   const [isSticky, setIsSticky] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
+  
+  // Fetch real revenue data from API
+  const { revenue, loading: revenueLoading, error: revenueError } = useDashboardData();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,11 +36,26 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
+  // Create updated metrics with real revenue data
+  const getUpdatedMetrics = () => {
+    const updatedMetrics = [...mockDashboardData.metrics];
+    
+    // Replace the first metric (Total Revenue) with real API data
+    if (revenue) {
+      updatedMetrics[0] = revenue;
+    }
+    
+    return updatedMetrics;
+  };
+
   return (
     <div className="h-[calc(100vh-80px)] overflow-y-auto">      
       {/* Mobile Dashboard - Only shows on screens below md (768px) */}
       <div className="md:hidden">
-        <MobileDashboard data={mockDashboardData} />
+        <MobileDashboard data={{
+          ...mockDashboardData,
+          metrics: getUpdatedMetrics()
+        }} />
       </div>
 
       {/* Desktop Dashboard - Only shows on md screens and above (768px+) */}
@@ -96,7 +115,7 @@ const Dashboard: React.FC = () => {
                 {/* Middle Section - Continues to scroll */}
                 <div className="md:col-span-12 lg:col-span-6">
                   <MiddleSection 
-                    metrics={mockDashboardData.metrics}
+                    metrics={getUpdatedMetrics()}
                     revenueChart={mockDashboardData.revenueChart}
                     ordersChart={mockDashboardData.ordersChart}
                   />
