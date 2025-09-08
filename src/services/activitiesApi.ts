@@ -1,7 +1,7 @@
 import { Activity } from '../types/activities';
 
 // Activities API Configuration
-const ACTIVITIES_API_BASE_URL = 'https://food-delivery-business-app-sera-backend-e70owjhmh.vercel.app';
+const ACTIVITIES_API_BASE_URL = 'https://food-delivery-business-app-sera-backend-pet5jpjf5.vercel.app';
 
 // Activities API Client
 class ActivitiesApiClient {
