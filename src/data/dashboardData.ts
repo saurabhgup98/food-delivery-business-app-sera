@@ -1,4 +1,5 @@
 // Dashboard data structure following business-app design pattern
+import { Activity } from '../types/activities';
 
 export interface MetricCard {
   title: string;
@@ -38,7 +39,7 @@ export interface ChartData {
 
 export interface DashboardData {
   metrics: MetricCard[];
-  activities: ActivityItem[];
+  activities: ActivityItem[] | Activity[];
   quickActions: QuickAction[];
   revenueChart: ChartData;
   ordersChart: ChartData;

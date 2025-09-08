@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { mockDashboardData } from '../../data/dashboardData';
 import { useDashboardData } from '../../hooks/useDashboardData';
+import { useActivities } from '../../hooks/useActivities';
 import LeftSection from './Dashboard/LeftSection';
 import MiddleSection from './Dashboard/MiddleSection';
 import RightSection from './Dashboard/RightSection';
@@ -13,6 +14,11 @@ const Dashboard: React.FC = () => {
   
   // Fetch real revenue data from API
   const { revenue, loading: revenueLoading, error: revenueError } = useDashboardData();
+  
+  // Fetch real activities data from API
+  const { activities, error: activitiesError } = useActivities({ 
+    targetRole: 'admin' 
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,13 +64,19 @@ const Dashboard: React.FC = () => {
     console.error('Revenue fetch error:', revenueError);
   }
 
+  // Log error if activities fetch failed
+  if (activitiesError) {
+    console.error('Activities fetch error:', activitiesError);
+  }
+
   return (
     <div className="h-[calc(100vh-80px)] overflow-y-auto">      
       {/* Mobile Dashboard - Only shows on screens below md (768px) */}
       <div className="md:hidden">
         <MobileDashboard data={{
           ...mockDashboardData,
-          metrics: getUpdatedMetrics()
+          metrics: getUpdatedMetrics(),
+          activities: activities
         }} />
       </div>
 
@@ -117,10 +129,10 @@ const Dashboard: React.FC = () => {
             {/* Dashboard with Sticky Behavior */}
             <div className={isSticky ? 'relative' : ''}>
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
-                {/* Left Section - Becomes sticky when intro scrolls behind header */}
-                <div className={`md:col-span-12 lg:col-span-3 ${isSticky ? 'lg:sticky lg:top-6 lg:h-fit' : ''}`}>
-                  <LeftSection activities={mockDashboardData.activities} />
-                </div>
+                    {/* Left Section - Becomes sticky when intro scrolls behind header */}
+                    <div className={`md:col-span-12 lg:col-span-3 ${isSticky ? 'lg:sticky lg:top-6 lg:h-fit' : ''}`}>
+                      <LeftSection activities={activities} />
+                    </div>
                 
                 {/* Middle Section - Continues to scroll */}
                 <div className="md:col-span-12 lg:col-span-6">

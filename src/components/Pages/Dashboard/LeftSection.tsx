@@ -1,21 +1,17 @@
-import { ActivityItem } from '../../../data/dashboardData';
+import { Activity } from '../../../types/activities';
+import { ACTIVITY_TYPES } from '../../../types/activities';
 
 interface LeftSectionProps {
-  activities: ActivityItem[];
+  activities: Activity[];
 }
 
 export default function LeftSection({ activities }: LeftSectionProps) {
   const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'order':
-        return '📦';
-      case 'user':
-        return '👤';
-      case 'system':
-        return '⚙️';
-      default:
-        return '📋';
-    }
+    return ACTIVITY_TYPES[type]?.icon || '📋';
+  };
+
+  const getActivityColor = (type: string) => {
+    return ACTIVITY_TYPES[type]?.color || 'text-slate-300';
   };
 
   const getStatusColor = (status?: string) => {
@@ -103,7 +99,7 @@ export default function LeftSection({ activities }: LeftSectionProps) {
       {/* Activities List */}
       <div className="p-3 space-y-3 flex-1 overflow-y-auto custom-scrollbar bg-gradient-to-br from-dark-700 via-dark-600 to-dark-500 min-h-0 max-h-[calc(100vh-300px)] sm:max-h-[calc(100vh-250px)] lg:max-h-[calc(100vh-200px)]">
         {activities.map((activity, index) => (
-          <div key={activity.id} className="group relative">
+          <div key={activity._id} className="group relative">
             <div className={`flex items-start space-x-4 p-4 rounded-xl transition-all duration-300 cursor-pointer group ${getCardStyle(activity.type)} hover:scale-[1.02] hover:translate-x-1`}>
               {/* Activity Icon */}
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-base shadow-lg group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ${getIconStyle(activity.type)}`}>
@@ -119,15 +115,17 @@ export default function LeftSection({ activities }: LeftSectionProps) {
                   {activity.description}
                 </p>
                 
-                {/* Time and Status */}
+                {/* Time and User Info */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <div className={`w-2 h-2 rounded-full ${getTimeDotColor(activity.type)}`}></div>
-                    <span className="text-gray-500 text-xs font-medium">{activity.time}</span>
+                    <span className="text-gray-500 text-xs font-medium">
+                      {new Date(activity.timestamp).toLocaleString()}
+                    </span>
                   </div>
-                  {activity.status && (
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full border ${getStatusColor(activity.status)}`}>
-                      {activity.status}
+                  {activity.userId && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full border bg-blue-500/20 text-blue-300 border-blue-500/40">
+                      {activity.userId.name}
                     </span>
                   )}
                 </div>

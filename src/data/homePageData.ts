@@ -19,6 +19,7 @@ export interface HeroData {
 }
 
 export interface AdminAccessData {
+  
   title: string;
   description: string;
   primaryCTA: {
