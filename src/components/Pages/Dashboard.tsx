@@ -41,12 +41,22 @@ const Dashboard: React.FC = () => {
     const updatedMetrics = [...mockDashboardData.metrics];
     
     // Replace the first metric (Total Revenue) with real API data
-    if (revenue) {
+    if (revenue && !revenueError) {
       updatedMetrics[0] = revenue;
     }
     
     return updatedMetrics;
   };
+
+  // Show loading state if revenue is being fetched
+  if (revenueLoading) {
+    console.log('Loading revenue data...');
+  }
+
+  // Log error if revenue fetch failed
+  if (revenueError) {
+    console.error('Revenue fetch error:', revenueError);
+  }
 
   return (
     <div className="h-[calc(100vh-80px)] overflow-y-auto">      
