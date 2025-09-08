@@ -10,22 +10,6 @@ export default function LeftSection({ activities }: LeftSectionProps) {
     return ACTIVITY_TYPES[type]?.icon || '📋';
   };
 
-  const getActivityColor = (type: string) => {
-    return ACTIVITY_TYPES[type]?.color || 'text-slate-300';
-  };
-
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-lg shadow-emerald-500/20';
-      case 'pending':
-        return 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-lg shadow-amber-500/20';
-      case 'failed':
-        return 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-lg shadow-rose-500/20';
-      default:
-        return 'bg-slate-500/20 text-slate-300 border-slate-500/40 shadow-lg shadow-slate-500/20';
-    }
-  };
 
   const getCardStyle = (type: string) => {
     switch (type) {

@@ -321,8 +321,8 @@ export default function MobileDashboard({ data }: MobileDashboardProps) {
           
           {expandedSections.activities ? (
             <div className="p-4 space-y-3 max-h-96 overflow-y-auto custom-scrollbar">
-              {data.activities.map((activity) => (
-                <div key={activity.id} className="bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-700/85 border border-white/10 rounded-lg p-4">
+              {data.activities.map((activity, index) => (
+                <div key={'id' in activity ? activity.id : activity._id || index} className="bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-700/85 border border-white/10 rounded-lg p-4">
                   <div className="flex items-start space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-sera-blue/30 to-sera-blue/20 rounded-lg flex items-center justify-center text-sm flex-shrink-0">
                       {getActivityIcon(activity.type)}
@@ -331,8 +331,10 @@ export default function MobileDashboard({ data }: MobileDashboardProps) {
                       <h4 className="text-white font-semibold text-sm mb-1">{activity.title}</h4>
                       <p className="text-gray-400 text-xs mb-2 line-clamp-2">{activity.description}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-500 text-xs">{activity.time}</span>
-                        {activity.status && (
+                        <span className="text-gray-500 text-xs">
+                          {'time' in activity ? activity.time : new Date(activity.timestamp).toLocaleString()}
+                        </span>
+                        {'status' in activity && activity.status && (
                           <span className={`text-xs font-bold px-2 py-1 rounded-full border ${getStatusColor(activity.status)}`}>
                             {activity.status}
                           </span>
@@ -346,15 +348,17 @@ export default function MobileDashboard({ data }: MobileDashboardProps) {
           ) : (
             <div className="p-4">
               <div className="space-y-3">
-                {data.activities.slice(0, 2).map((activity) => (
-                  <div key={activity.id} className="bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-700/85 border border-white/10 rounded-lg p-3">
+                {data.activities.slice(0, 2).map((activity, index) => (
+                  <div key={'id' in activity ? activity.id : activity._id || index} className="bg-gradient-to-r from-slate-900/95 via-slate-800/90 to-slate-700/85 border border-white/10 rounded-lg p-3">
                     <div className="flex items-center space-x-3">
                       <div className="w-6 h-6 bg-gradient-to-br from-sera-blue/30 to-sera-blue/20 rounded-lg flex items-center justify-center text-xs flex-shrink-0">
                         {getActivityIcon(activity.type)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="text-white font-medium text-xs truncate">{activity.title}</h4>
-                        <p className="text-gray-500 text-xs">{activity.time}</p>
+                        <p className="text-gray-500 text-xs">
+                          {'time' in activity ? activity.time : new Date(activity.timestamp).toLocaleString()}
+                        </p>
                       </div>
                     </div>
                   </div>

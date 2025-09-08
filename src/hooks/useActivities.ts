@@ -41,6 +41,7 @@ export const useActivities = (options: UseActivitiesOptions = {}): UseActivities
     try {
       setLoading(true);
       setError(null);
+      console.log('Fetching activities with options:', { targetRole, restaurantId, pageNum, limit });
       
       let response: ActivitiesResponse;
       
@@ -52,6 +53,8 @@ export const useActivities = (options: UseActivitiesOptions = {}): UseActivities
         throw new Error('Invalid configuration for fetching activities');
       }
 
+      console.log('Activities response:', response);
+      
       if (append) {
         setActivities(prev => [...prev, ...response.activities]);
       } else {
