@@ -1,39 +1,56 @@
-import React, { useState } from 'react';
-import { UserIcon, LogOutIcon } from '../Icons';
+import React, { useState, useRef, useEffect } from 'react';
+import { UserIcon, LogOutIcon, SettingsIcon, ShieldIcon, HelpIcon } from '../Icons';
 import { AdminUser } from './headerData';
 
 interface AdminProfileProps {
   adminUser: AdminUser;
   onLogout: () => void;
+  onAdminConsoleClick?: () => void;
   className?: string;
 }
 
 const AdminProfile: React.FC<AdminProfileProps> = ({
   adminUser,
   onLogout,
+  onAdminConsoleClick,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-105 group"
+        className="flex items-center space-x-3 p-3 text-white hover:bg-white/15 rounded-xl transition-all duration-300 hover:scale-105 group backdrop-blur-sm border border-white/20 hover:border-white/30"
       >
         {/* User Avatar */}
-        <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
-          <UserIcon className="w-4 h-4 text-white" />
+        <div className="w-10 h-10 bg-gradient-to-br from-white/30 to-white/10 rounded-full flex items-center justify-center border border-white/40 shadow-lg group-hover:shadow-xl transition-all duration-300">
+          <UserIcon className="w-5 h-5 text-white" />
         </div>
         
         {/* User Info */}
         <div className="hidden sm:block text-left">
-          <p className="text-sm font-medium text-white">{adminUser.name}</p>
-          <p className="text-xs text-white/70">{adminUser.role}</p>
+          <p className="text-sm font-semibold text-white group-hover:text-white/90 transition-colors">{adminUser.name}</p>
+          <p className="text-xs text-white/80 group-hover:text-white/70 transition-colors capitalize">{adminUser.role.replace('-', ' ')}</p>
         </div>
         
         {/* Dropdown Arrow */}
-        <div className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+        <div className={`w-4 h-4 transition-all duration-300 ${isOpen ? 'rotate-180 text-white' : 'text-white/70 group-hover:text-white'}`}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
@@ -42,41 +59,87 @@ const AdminProfile: React.FC<AdminProfileProps> = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+        <div className="absolute right-0 mt-3 w-72 bg-white/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 z-50 overflow-hidden animate-in slide-in-from-top-2 duration-200">
           <div className="p-4">
-            {/* User Header */}
-            <div className="flex items-center space-x-3 pb-3 border-b border-gray-200">
-              <div className="w-12 h-12 bg-sera-blue/20 rounded-full flex items-center justify-center">
-                <UserIcon className="w-6 h-6 text-sera-blue" />
+            {/* User Header - More Compact */}
+            <div className="flex items-center space-x-3 pb-3 border-b border-gray-100/60">
+              <div className="w-12 h-12 bg-gradient-to-br from-sera-blue via-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg ring-1 ring-white/30">
+                <UserIcon className="w-6 h-6 text-white" />
               </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-900">{adminUser.name}</p>
-                <p className="text-xs text-gray-500">{adminUser.email}</p>
-                <p className="text-xs text-sera-blue font-medium">{adminUser.role}</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-gray-900 truncate">{adminUser.name}</p>
+                <p className="text-xs text-gray-500 truncate">{adminUser.email}</p>
+                <div className="flex items-center mt-1">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
+                    adminUser.role === 'superadmin' 
+                      ? 'bg-red-50 text-red-700 border border-red-200' 
+                      : adminUser.role === 'admin'
+                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                      : 'bg-blue-50 text-blue-700 border border-blue-200'
+                  }`}>
+                    {adminUser.role === 'superadmin' && <ShieldIcon className="w-2.5 h-2.5 mr-1" />}
+                    {adminUser.role === 'admin' && <ShieldIcon className="w-2.5 h-2.5 mr-1" />}
+                    {adminUser.role.replace('-', ' ')}
+                  </span>
+                </div>
               </div>
             </div>
             
-            {/* Menu Items */}
-            <div className="py-2">
-              <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200">
-                Profile Settings
+            {/* Menu Items - More Compact */}
+            <div className="py-1">
+              {/* Admin Console - Only for superadmin */}
+              {adminUser.role === 'superadmin' && (
+                <button 
+                  onClick={() => {
+                    onAdminConsoleClick?.();
+                    setIsOpen(false);
+                  }}
+                  className="w-full flex items-center space-x-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 rounded-lg transition-all duration-200 group"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-200 shadow-sm">
+                    <ShieldIcon className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="font-semibold text-gray-900 group-hover:text-purple-700 transition-colors text-sm">Admin Console</p>
+                    <p className="text-xs text-gray-500 group-hover:text-purple-600 transition-colors">Manage users & permissions</p>
+                  </div>
+                </button>
+              )}
+              
+              <button className="w-full flex items-center space-x-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 rounded-lg transition-all duration-200 group">
+                <div className="w-8 h-8 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-200 shadow-sm">
+                  <SettingsIcon className="w-4 h-4 text-gray-600 group-hover:text-blue-600 transition-colors" />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors text-sm">Profile Settings</p>
+                  <p className="text-xs text-gray-500 group-hover:text-blue-600 transition-colors">Manage your profile</p>
+                </div>
               </button>
-              <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200">
-                Account Preferences
-              </button>
-              <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200">
-                Help & Support
+              
+              <button className="w-full flex items-center space-x-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-green-50 rounded-lg transition-all duration-200 group">
+                <div className="w-8 h-8 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-200 shadow-sm">
+                  <HelpIcon className="w-4 h-4 text-gray-600 group-hover:text-green-600 transition-colors" />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="font-semibold text-gray-900 group-hover:text-green-700 transition-colors text-sm">Help & Support</p>
+                  <p className="text-xs text-gray-500 group-hover:text-green-600 transition-colors">Get help and support</p>
+                </div>
               </button>
             </div>
             
-            {/* Logout Button */}
-            <div className="pt-2 border-t border-gray-200">
+            {/* Logout Button - More Compact */}
+            <div className="pt-2 border-t border-gray-100/60">
               <button
                 onClick={onLogout}
-                className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                className="w-full flex items-center space-x-3 px-3 py-2.5 text-sm text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 rounded-lg transition-all duration-200 group"
               >
-                <LogOutIcon className="w-4 h-4" />
-                <span>Sign Out</span>
+                <div className="w-8 h-8 bg-gradient-to-br from-red-100 to-red-200 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all duration-200 shadow-sm">
+                  <LogOutIcon className="w-4 h-4 text-red-600 group-hover:text-red-700 transition-colors" />
+                </div>
+                <div className="text-left flex-1">
+                  <p className="font-semibold text-red-700 group-hover:text-red-800 transition-colors text-sm">Sign Out</p>
+                  <p className="text-xs text-red-500 group-hover:text-red-600 transition-colors">Logout from your account</p>
+                </div>
               </button>
             </div>
           </div>

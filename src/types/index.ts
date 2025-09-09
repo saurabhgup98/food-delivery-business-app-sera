@@ -71,7 +71,10 @@ export interface User {
   name: string;
   email: string;
   emailVerified: boolean;
+  appRegistered: { name: string; role: string; }[];
   oauthProvider?: 'google' | 'facebook' | 'github' | 'local';
+  role?: string; // App-specific role
+  appEndpoint?: string; // App-specific endpoint
 }
 
 export interface AuthTokens {
@@ -91,12 +94,15 @@ export interface AuthResponse {
 export interface LoginRequest {
   email: string;
   password: string;
+  appEndpoint: string; // App URL endpoint
 }
 
 export interface RegisterRequest {
   name: string;
   email: string;
   password: string;
+  appName: string; // App URL endpoint
+  role: 'user' | 'business-user' | 'admin' | 'superadmin'; // App-specific role
 }
 
 export interface ApiError {

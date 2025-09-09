@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface SearchIconProps {
+interface UsersIconProps {
   className?: string;
 }
 
-const SearchIcon: React.FC<SearchIconProps> = ({ className = "w-6 h-6" }) => {
+const UsersIcon: React.FC<UsersIconProps> = ({ className = "w-6 h-6" }) => {
   return (
     <svg
       className={className}
@@ -17,10 +17,10 @@ const SearchIcon: React.FC<SearchIconProps> = ({ className = "w-6 h-6" }) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a4 4 0 11-8 0 4 4 0 018 0z"
       />
     </svg>
   );
 };
 
-export default SearchIcon;
+export default UsersIcon;

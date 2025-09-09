@@ -60,6 +60,7 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
         const loginData: LoginRequest = {
           email: formData.email,
           password: formData.password,
+          appEndpoint: 'https://food-delivery-business-app-sera.vercel.app',
         };
         await login(loginData);
       } else {
@@ -67,6 +68,8 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
           name: formData.fullName,
           email: formData.email,
           password: formData.password,
+          appName: 'https://food-delivery-business-app-sera.vercel.app',
+          role: 'business-user', // Default role for business app registration
         };
         await register(registerData);
       }

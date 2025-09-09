@@ -22,6 +22,9 @@ interface HeaderProps {
   setAuthMode?: (mode: 'login' | 'register') => void;
   onAuthSuccess?: () => void;
   onModeChange?: (mode: 'login' | 'register') => void;
+  onAdminConsoleClick?: () => void;
+  onLogoClick?: () => void;
+  onLogout?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -29,7 +32,10 @@ const Header: React.FC<HeaderProps> = ({
   onNavClick,
   currentPage = 'home',
   setShowAuthModal,
-  setAuthMode
+  setAuthMode,
+  onAdminConsoleClick,
+  onLogoClick,
+  onLogout
 }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -42,6 +48,7 @@ const Header: React.FC<HeaderProps> = ({
   const handleLogout = async () => {
     try {
       await logout();
+      onLogout?.(); // Call the parent logout handler
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -87,10 +94,24 @@ const Header: React.FC<HeaderProps> = ({
 
         <div className="relative max-w-full mx-auto px-4 sm:px-2 lg:px-12">
           <div className="flex justify-between items-center h-20">
-            {/* Left Side - Logo and Brand */}
-            <div className="flex items-center">
+            {/* Left Side - Logo and Navigation */}
+            <div className="flex items-center space-x-8">
               {/* Logo and Brand - Using Logo Component */}
-              <Logo onClick={() => alert('SERA BUSINESS clicked!')} />
+              <Logo onClick={onLogoClick} />
+              
+              {/* Navigation (for logged users only) */}
+              {isAuthenticated && (
+                <div className="hidden lg:flex items-center">
+                  {/* Desktop Navigation - Using PrimaryHorizontalNavbar */}
+                  <PrimaryHorizontalNavbar 
+                    navigationItems={headerData.navigationItems.map(item => ({
+                      ...item,
+                      isActive: item.name.toLowerCase() === currentPage
+                    }))}
+                    onNavClick={handleNavClick}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Right Side - Conditional Content Based on Auth Status */}
@@ -107,24 +128,13 @@ const Header: React.FC<HeaderProps> = ({
                 />
               </div>
             ) : (
-              /* Logged User: Show full header with navigation, search, notifications, and profile */
+              /* Logged User: Show search, notifications, and profile */
               <>
-                {/* Left Side - Navigation (for logged users) */}
-                <div className="flex items-center space-x-6">
-                  {/* Desktop Navigation - Using PrimaryHorizontalNavbar */}
-                  <PrimaryHorizontalNavbar 
-                    navigationItems={headerData.navigationItems.map(item => ({
-                      ...item,
-                      isActive: item.name.toLowerCase() === currentPage
-                    }))}
-                    onNavClick={handleNavClick}
-                  />
-                </div>
 
                 {/* Right Side - Search Bar, Notifications, and Profile */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-6">
                   {/* Action Buttons */}
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-4">
                     {/* Search Bar - Using PrimarySearchBar Component */}
                     <div className="hidden lg:flex w-64">
                       <PrimarySearchBar
@@ -149,9 +159,10 @@ const Header: React.FC<HeaderProps> = ({
                         name: user?.name || 'User',
                         email: user?.email || 'user@example.com',
                         avatar: '',
-                        role: 'admin'
+                        role: user?.role || 'business-user'
                       }}
                       onLogout={handleLogout}
+                      onAdminConsoleClick={onAdminConsoleClick}
                     />
 
                     {/* Mobile Menu Button */}
