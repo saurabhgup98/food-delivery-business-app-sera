@@ -156,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({
                     {/* Admin Profile - Using AdminProfile Component */}
                     <AdminProfile
                       adminUser={{
-                        name: user?.name || 'User',
+                        name: user?.username || 'User',
                         email: user?.email || 'user@example.com',
                         avatar: '',
                         role: user?.role || 'business-user'

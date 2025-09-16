@@ -47,21 +47,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeAuth();
   }, []);
 
-  // Auto-refresh token before expiration
-  useEffect(() => {
-    const tokenRefreshInterval = setInterval(async () => {
-      if (authApi.isAuthenticated()) {
-        try {
-          await authApi.refreshToken();
-        } catch (error) {
-          console.error('Token refresh failed:', error);
-          handleLogout();
-        }
-      }
-    }, 14 * 60 * 1000); // Refresh every 14 minutes (token expires in 15 minutes)
-
-    return () => clearInterval(tokenRefreshInterval);
-  }, []);
+  // Simple auth doesn't need token refresh
+  // Removed token refresh logic for simple authentication
 
   const login = async (credentials: LoginRequest): Promise<AuthResponse> => {
     try {
@@ -125,13 +112,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const refreshToken = async (): Promise<void> => {
-    try {
-      await authApi.refreshToken();
-    } catch (error) {
-      console.error('Token refresh failed:', error);
-      handleLogout();
-      throw error;
-    }
+    // Simple auth doesn't use token refresh
+    // This method is kept for compatibility but does nothing
+    return Promise.resolve();
   };
 
   const clearError = (): void => {

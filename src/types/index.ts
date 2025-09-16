@@ -68,13 +68,9 @@ export interface AdminAccessData {
 // Authentication types
 export interface User {
   id: string;
-  name: string;
+  username: string;
   email: string;
-  emailVerified: boolean;
-  appRegistered: { name: string; role: string; }[];
-  oauthProvider?: 'google' | 'facebook' | 'github' | 'local';
-  role?: string; // App-specific role
-  appEndpoint?: string; // App-specific endpoint
+  role: string;
 }
 
 export interface AuthTokens {
@@ -87,14 +83,13 @@ export interface AuthResponse {
   message: string;
   data: {
     user: User;
-    tokens: AuthTokens;
   };
 }
 
 export interface LoginRequest {
   email: string;
   password: string;
-  appEndpoint: string; // App URL endpoint
+  appEndpoint?: string; // App URL endpoint (optional for simple auth)
 }
 
 export interface RegisterRequest {

@@ -1,7 +1,7 @@
 import { AuthResponse, LoginRequest, RegisterRequest, AuthTokens } from '../types';
 
 // API Configuration
-const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-auth-service.vercel.app';
+const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-auth.vercel.app';
 console.log('API_BASE_URL:', API_BASE_URL);
 console.log('Environment variable:', (import.meta as any).env?.VITE_API_BASE_URL);
 const API_ENDPOINTS = {
@@ -89,42 +89,43 @@ class ApiClient {
       body: JSON.stringify(userData),
     });
 
-    if (response.success && response.data.tokens) {
-      this.setTokens(response.data.tokens);
+    if (response.success && response.data.user) {
+      // Store user data without tokens for simple auth
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('isLoggedIn', 'true');
     }
 
     return response;
   }
 
   async login(credentials: LoginRequest): Promise<AuthResponse> {
+    // Simple auth API doesn't use tokens, just email and password
+    const simpleCredentials = {
+      email: credentials.email,
+      password: credentials.password
+    };
+
     const response = await this.request<AuthResponse>(API_ENDPOINTS.login, {
       method: 'POST',
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(simpleCredentials),
     });
 
-    if (response.success && response.data.tokens) {
-      this.setTokens(response.data.tokens);
+    if (response.success && response.data.user) {
+      // Store user data without tokens for simple auth
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('isLoggedIn', 'true');
     }
 
     return response;
   }
 
   async logout(): Promise<{ success: boolean; message: string }> {
-    const refreshToken = this.getRefreshToken();
-    
     try {
-      if (refreshToken) {
-        await this.request(API_ENDPOINTS.logout, {
-          method: 'POST',
-          body: JSON.stringify({ refreshToken }),
-        });
-      }
-    } catch (error) {
-      console.error('Logout request failed:', error);
-    } finally {
+      // Simple auth doesn't require server-side logout
+      // Just clear local storage
       this.clearTokens();
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
 
     return { success: true, message: 'Logged out successfully' };
@@ -174,9 +175,9 @@ class ApiClient {
 
   // Utility methods
   isAuthenticated(): boolean {
-    const token = this.getAccessToken();
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
     const user = localStorage.getItem('user');
-    return !!(token && user);
+    return !!(isLoggedIn === 'true' && user);
   }
 
   getCurrentUser(): any | null {

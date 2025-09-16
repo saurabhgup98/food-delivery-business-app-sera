@@ -60,7 +60,6 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
         const loginData: LoginRequest = {
           email: formData.email,
           password: formData.password,
-          appEndpoint: 'https://food-delivery-business-app-sera.vercel.app',
         };
         await login(loginData);
       } else {
