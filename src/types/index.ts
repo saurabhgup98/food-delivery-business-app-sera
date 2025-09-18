@@ -86,6 +86,7 @@ export interface AuthResponse {
   };
 }
 
+// Login request interface with appEndpoint
 export interface LoginRequest {
   email: string;
   password: string;

@@ -57,9 +57,11 @@ export default function AuthModals({ isOpen, onClose, mode, onModeChange, onSucc
 
     try {
       if (mode === 'login') {
+        // Login with appEndpoint for authentication service - deployment fix
         const loginData: LoginRequest = {
           email: formData.email,
           password: formData.password,
+          appEndpoint: 'https://food-delivery-business-app-sera.vercel.app',
         };
         await login(loginData);
       } else {
