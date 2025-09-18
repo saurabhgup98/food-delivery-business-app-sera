@@ -89,7 +89,7 @@ export interface AuthResponse {
 export interface LoginRequest {
   email: string;
   password: string;
-  appEndpoint?: string; // App URL endpoint (optional for simple auth)
+  appEndpoint: string; // App URL endpoint (required for the authentication service)
 }
 
 export interface RegisterRequest {

@@ -99,19 +99,20 @@ class ApiClient {
   }
 
   async login(credentials: LoginRequest): Promise<AuthResponse> {
-    // Simple auth API doesn't use tokens, just email and password
-    const simpleCredentials = {
+    // Add appEndpoint for the old authentication service
+    const loginCredentials = {
       email: credentials.email,
-      password: credentials.password
+      password: credentials.password,
+      appEndpoint: credentials.appEndpoint || 'https://food-delivery-business-app-sera.vercel.app'
     };
 
     const response = await this.request<AuthResponse>(API_ENDPOINTS.login, {
       method: 'POST',
-      body: JSON.stringify(simpleCredentials),
+      body: JSON.stringify(loginCredentials),
     });
 
     if (response.success && response.data.user) {
-      // Store user data without tokens for simple auth
+      // Store user data
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('isLoggedIn', 'true');
     }
