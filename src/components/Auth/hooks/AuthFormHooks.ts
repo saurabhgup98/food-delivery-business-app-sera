@@ -172,11 +172,14 @@ export const useModalState = (isOpen: boolean, onClose: () => void) => {
  * Custom hook for OAuth authentication
  */
 export const useOAuthAuth = () => {
-  const handleOAuthLogin = useCallback((provider: 'google' | 'facebook') => {
+  const handleOAuthLogin = useCallback((provider: 'google' | 'facebook', role?: string) => {
     const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-authentication-service.vercel.app';
+    
+    // Add role as query parameter if provided
+    const roleParam = role ? `?role=${encodeURIComponent(role)}` : '';
     const authUrl = provider === 'google' 
-      ? `${baseUrl}/api/oauth/google`
-      : `${baseUrl}/api/oauth/facebook`;
+      ? `${baseUrl}/api/oauth/google${roleParam}`
+      : `${baseUrl}/api/oauth/facebook${roleParam}`;
     
     window.location.href = authUrl;
   }, []);

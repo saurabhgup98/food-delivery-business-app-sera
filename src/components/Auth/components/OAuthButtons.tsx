@@ -5,7 +5,15 @@ import { useOAuthAuth } from '../hooks/AuthFormHooks';
 import { OAuthBtn, OAuthProvider } from './OAuthBtn';
 import { GoogleIcon, FacebookIcon } from '../icons/OAuthIcons';
 
-export const OAuthButtons: React.FC = () => {
+interface OAuthButtonsProps {
+  selectedRole?: string | null;
+  disabled?: boolean;
+}
+
+export const OAuthButtons: React.FC<OAuthButtonsProps> = ({ 
+  selectedRole = null, 
+  disabled = false 
+}) => {
   const { handleOAuthLogin } = useOAuthAuth();
 
   // OAuth provider configurations
@@ -26,13 +34,18 @@ export const OAuthButtons: React.FC = () => {
     },
   ];
 
+  // Don't show OAuth buttons if no role is selected or if disabled
+  if (!selectedRole || disabled) {
+    return null;
+  }
+
   return (
     <div className="space-y-3">
       {oauthProviders.map((provider) => (
         <OAuthBtn
           key={provider.name}
           provider={provider}
-          onClick={() => handleOAuthLogin(provider.name as 'google' | 'facebook')}
+          onClick={() => handleOAuthLogin(provider.name as 'google' | 'facebook', selectedRole)}
         />
       ))}
     </div>

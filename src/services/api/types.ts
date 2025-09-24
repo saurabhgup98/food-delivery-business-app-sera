@@ -35,6 +35,7 @@ export interface LoginRequest {
   email: string;
   password: string;
   appEndpoint: string;
+  role?: string;
 }
 
 export interface RegisterRequest {

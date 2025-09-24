@@ -32,13 +32,14 @@ export class AuthService {
 
     /** * Login user */
     async login(credentials: LoginRequest): Promise<AuthResponse> {
-        // Add appEndpoint for the authentication service
+        // Add appEndpoint and role for the authentication service
         const loginCredentials = {
             email: credentials.email,
             password: credentials.password,
             appEndpoint:
                 credentials.appEndpoint ||
                 "https://food-delivery-business-app-sera.vercel.app",
+            role: credentials.role,
         };
 
         const response = await this.httpClient.post<any>(
