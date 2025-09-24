@@ -94,11 +94,11 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  name: string;
+  username: string;
   email: string;
   password: string;
-  appName: string; // App URL endpoint
-  role: 'user' | 'business-user' | 'admin' | 'superadmin'; // App-specific role
+  appEndpoint: string; // App URL endpoint
+  role?: 'user' | 'business-user' | 'admin' | 'superadmin'; // App-specific role (optional, defaults based on app)
 }
 
 export interface ApiError {

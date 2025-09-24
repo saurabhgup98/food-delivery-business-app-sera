@@ -39,11 +39,11 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  name: string;
+  username: string;
   email: string;
   password: string;
-  appName: string;
-  role: 'user' | 'business-user' | 'admin' | 'superadmin';
+  appEndpoint: string;
+  role?: 'user' | 'business-user' | 'admin' | 'superadmin';
 }
 
 export interface HttpConfig {

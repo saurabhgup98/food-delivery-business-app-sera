@@ -114,10 +114,10 @@ export const useAuthFormSubmission = (mode: 'login' | 'register') => {
         await login(loginData);
       } else {
         const registerData: RegisterRequest = {
-          name: sanitizedData.fullName,
+          username: sanitizedData.fullName,
           email: sanitizedData.email,
           password: sanitizedData.password,
-          appName: AUTH_FORM_CONSTANTS.APP_ENDPOINT,
+          appEndpoint: AUTH_FORM_CONSTANTS.APP_ENDPOINT,
           role: AUTH_FORM_CONSTANTS.DEFAULT_ROLE,
         };
         await register(registerData);
