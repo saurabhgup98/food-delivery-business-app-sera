@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, LoginRequest, RegisterRequest, AuthResponse } from '../types';
-import { authApi } from '../services/api';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { User, LoginRequest, RegisterRequest, AuthResponse } from "../types";
+import { authApi } from "../services/api";
 
 interface AuthContextType {
   user: User | null;
@@ -31,13 +37,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         const isAuth = authApi.isAuthenticated();
         const currentUser = authApi.getCurrentUser();
-        
+
         if (isAuth && currentUser) {
           setUser(currentUser);
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
-        // Clear invalid tokens
+        console.error("Auth initialization error:", error);
+        // Clear invalid tokens5
         authApi.logout();
       } finally {
         setIsLoading(false);
@@ -54,17 +60,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const response = await authApi.login(credentials);
-      
+
       if (response.success && response.data.user) {
         setUser(response.data.user);
-        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem("isLoggedIn", "true");
       }
-      
+
       return response;
     } catch (error: any) {
-      const errorMessage = error.message || 'Login failed';
+      const errorMessage = error.message || "Login failed";
       setError(errorMessage);
       throw error;
     } finally {
@@ -76,17 +82,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const response = await authApi.register(userData);
-      
+
       if (response.success && response.data.user) {
         setUser(response.data.user);
-        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem("isLoggedIn", "true");
       }
-      
+
       return response;
     } catch (error: any) {
-      const errorMessage = error.message || 'Registration failed';
+      const errorMessage = error.message || "Registration failed";
       setError(errorMessage);
       throw error;
     } finally {
@@ -99,7 +105,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
       await authApi.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       handleLogout();
     }
@@ -107,7 +113,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const handleLogout = (): void => {
     setUser(null);
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem("isLoggedIn");
     setIsLoading(false);
   };
 
@@ -133,17 +139,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     clearError,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
