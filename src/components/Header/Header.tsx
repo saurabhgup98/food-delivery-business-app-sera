@@ -159,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({
                         name: user?.username || 'User',
                         email: user?.email || 'user@example.com',
                         avatar: '',
-                        role: 'business-user' // Default role for business app
+                        role: user?.role || 'business-user' // Use actual role from user
                       }}
                       onLogout={handleLogout}
                       onAdminConsoleClick={onAdminConsoleClick}

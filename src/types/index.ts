@@ -70,9 +70,13 @@ export interface User {
   id: string;
   username?: string;
   email: string;
+  role?: string;
+  availableRoles?: string[];
+  appIdentifier?: string;
+  authMethod?: string;
   appRegistered: Array<{
     appIdentifier: string;
-    role: string;
+    roles: string[];
     authMethod: string;
     isActive: boolean;
   }>;
@@ -91,6 +95,7 @@ export interface AuthResponse {
     role?: string;
     availableRoles?: string[];
     appIdentifier?: string;
+    authMethod?: string;
   };
 }
 

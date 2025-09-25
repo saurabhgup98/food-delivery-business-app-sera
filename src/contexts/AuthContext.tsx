@@ -63,7 +63,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.login(credentials);
 
       if (response.success && response.data.user) {
-        setUser(response.data.user);
+        // Create user object with role information from response
+        const userWithRole = {
+          ...response.data.user,
+          role: response.data.role,
+          availableRoles: response.data.availableRoles,
+          appIdentifier: response.data.appIdentifier,
+          authMethod: response.data.authMethod
+        };
+        setUser(userWithRole);
         localStorage.setItem("isLoggedIn", "true");
         // Tokens are already stored by the auth service
       }
@@ -86,7 +94,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.register(userData);
 
       if (response.success && response.data.user) {
-        setUser(response.data.user);
+        // Create user object with role information from response
+        const userWithRole = {
+          ...response.data.user,
+          role: response.data.role,
+          availableRoles: response.data.availableRoles,
+          appIdentifier: response.data.appIdentifier,
+          authMethod: response.data.authMethod
+        };
+        setUser(userWithRole);
         localStorage.setItem("isLoggedIn", "true");
         // Tokens are already stored by the auth service
       }
