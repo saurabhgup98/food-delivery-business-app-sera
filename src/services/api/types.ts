@@ -18,9 +18,14 @@ export interface AuthTokens {
 
 export interface User {
   id: string;
-  username: string;
+  name: string;
   email: string;
+  emailVerified: boolean;
+  oauthProvider: string;
   role: string;
+  appEndpoint: string;
+  appIdentifier: string;
+  authMethod: string;
 }
 
 export interface AuthResponse {
@@ -28,6 +33,7 @@ export interface AuthResponse {
   message: string;
   data: {
     user: User;
+    tokens: AuthTokens;
   };
 }
 
@@ -39,10 +45,11 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  username: string;
+  name: string;
   email: string;
   password: string;
   appEndpoint: string;
+  authMethod?: 'email-password' | 'google-oauth' | 'facebook-oauth' | 'github-oauth';
   role?: 'user' | 'business-user' | 'admin' | 'superadmin';
 }
 

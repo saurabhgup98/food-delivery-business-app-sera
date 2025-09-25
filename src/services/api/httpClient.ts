@@ -35,6 +35,12 @@ export class HttpClient {
       };
     }
 
+    // Add app endpoint header for all requests
+    config.headers = {
+      ...config.headers,
+      'x-app-endpoint': 'https://food-delivery-business-app-sera.vercel.app',
+    };
+
     try {
       const response = await fetch(url, config);
       const data = await response.json();

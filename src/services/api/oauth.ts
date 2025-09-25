@@ -9,17 +9,20 @@ export class OAuthService {
 
   /** * Get Google OAuth URL */
   getGoogleAuthUrl(): string {
-    return `${this.baseURL}${API_ENDPOINTS.googleAuth}`;
+    const appEndpoint = 'https://food-delivery-business-app-sera.vercel.app';
+    return `${this.baseURL}${API_ENDPOINTS.googleAuth}?appEndpoint=${encodeURIComponent(appEndpoint)}`;
   }
 
   /** * Get Facebook OAuth URL */
   getFacebookAuthUrl(): string {
-    return `${this.baseURL}${API_ENDPOINTS.facebookAuth}`;
+    const appEndpoint = 'https://food-delivery-business-app-sera.vercel.app';
+    return `${this.baseURL}${API_ENDPOINTS.facebookAuth}?appEndpoint=${encodeURIComponent(appEndpoint)}`;
   }
 
   /** * Get GitHub OAuth URL */
   getGithubAuthUrl(): string {
-    return `${this.baseURL}${API_ENDPOINTS.githubAuth}`;
+    const appEndpoint = 'https://food-delivery-business-app-sera.vercel.app';
+    return `${this.baseURL}${API_ENDPOINTS.githubAuth}?appEndpoint=${encodeURIComponent(appEndpoint)}`;
   }
 
   /** * Handle OAuth callback (if needed in future) */

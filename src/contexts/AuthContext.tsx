@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { User, LoginRequest, RegisterRequest, AuthResponse } from "../types";
+import { User, LoginRequest, RegisterRequest, AuthResponse } from "../services/api/types";
 import { authApi } from "../services/api";
 
 interface AuthContextType {
@@ -66,6 +66,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success && response.data.user) {
         setUser(response.data.user);
         localStorage.setItem("isLoggedIn", "true");
+        // Tokens are already stored by the auth service
       }
 
       return response;
@@ -88,6 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success && response.data.user) {
         setUser(response.data.user);
         localStorage.setItem("isLoggedIn", "true");
+        // Tokens are already stored by the auth service
       }
 
       return response;

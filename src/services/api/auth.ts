@@ -10,6 +10,7 @@ export interface AuthResponse {
     message: string;
     data: {
         user: User;
+        tokens: AuthTokens;
     };
 }
 
@@ -18,13 +19,22 @@ export class AuthService {
 
     /** * Register new user */
     async register(userData: RegisterRequest): Promise<AuthResponse> {
+        // Add default authMethod if not provided
+        const registrationData = {
+            ...userData,
+            authMethod: userData.authMethod || 'email-password'
+        };
+
         const response = await this.httpClient.post<any>(
             API_ENDPOINTS.register,
-            userData
+            registrationData
         );
 
-        if (response.success && response.data?.user) {
+        if (response.success && response.data?.user && response.data?.tokens) {
             setUserData(response.data.user);
+            // Store tokens for future API calls
+            localStorage.setItem('accessToken', response.data.tokens.accessToken);
+            localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
         }
 
         return response as AuthResponse;
@@ -32,14 +42,13 @@ export class AuthService {
 
     /** * Login user */
     async login(credentials: LoginRequest): Promise<AuthResponse> {
-        // Add appEndpoint and role for the authentication service
+        // Add appEndpoint for the authentication service
         const loginCredentials = {
             email: credentials.email,
             password: credentials.password,
             appEndpoint:
                 credentials.appEndpoint ||
                 "https://food-delivery-business-app-sera.vercel.app",
-            role: credentials.role,
         };
 
         const response = await this.httpClient.post<any>(
@@ -47,8 +56,11 @@ export class AuthService {
             loginCredentials
         );
 
-        if (response.success && response.data?.user) {
+        if (response.success && response.data?.user && response.data?.tokens) {
             setUserData(response.data.user);
+            // Store tokens for future API calls
+            localStorage.setItem('accessToken', response.data.tokens.accessToken);
+            localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
         }
 
         return response as AuthResponse;
@@ -57,8 +69,10 @@ export class AuthService {
     /** * Logout user */
     async logout(): Promise<{ success: boolean; message: string }> {
         try {
-            // Simple auth doesn't require server-side logout,  Just clear local storage
+            // Clear local storage including tokens
             clearAuthData();
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
         } catch (error) {
             console.error("Logout failed:", error);
         }

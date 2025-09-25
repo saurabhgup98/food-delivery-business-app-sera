@@ -68,9 +68,14 @@ export interface AdminAccessData {
 // Authentication types
 export interface User {
   id: string;
-  username: string;
+  name: string;
   email: string;
+  emailVerified: boolean;
+  oauthProvider: string;
   role: string;
+  appEndpoint: string;
+  appIdentifier: string;
+  authMethod: string;
 }
 
 export interface AuthTokens {
@@ -83,6 +88,7 @@ export interface AuthResponse {
   message: string;
   data: {
     user: User;
+    tokens: AuthTokens;
   };
 }
 
@@ -94,10 +100,11 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  username: string;
+  name: string;
   email: string;
   password: string;
   appEndpoint: string; // App URL endpoint
+  authMethod?: 'email-password' | 'google-oauth' | 'facebook-oauth' | 'github-oauth';
   role?: 'user' | 'business-user' | 'admin' | 'superadmin'; // App-specific role (optional, defaults based on app)
 }
 

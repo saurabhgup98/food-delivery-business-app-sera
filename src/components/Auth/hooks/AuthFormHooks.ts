@@ -114,10 +114,11 @@ export const useAuthFormSubmission = (mode: 'login' | 'register') => {
         await login(loginData);
       } else {
         const registerData: RegisterRequest = {
-          username: sanitizedData.fullName,
+          name: sanitizedData.fullName,
           email: sanitizedData.email,
           password: sanitizedData.password,
           appEndpoint: AUTH_FORM_CONSTANTS.APP_ENDPOINT,
+          authMethod: 'email-password',
           role: AUTH_FORM_CONSTANTS.DEFAULT_ROLE,
         };
         await register(registerData);
@@ -172,14 +173,24 @@ export const useModalState = (isOpen: boolean, onClose: () => void) => {
  * Custom hook for OAuth authentication
  */
 export const useOAuthAuth = () => {
-  const handleOAuthLogin = useCallback((provider: 'google' | 'facebook', role?: string) => {
+  const handleOAuthLogin = useCallback((provider: 'google' | 'facebook' | 'github', role?: string) => {
     const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-authentication-service.vercel.app';
+    const appEndpoint = AUTH_FORM_CONSTANTS.APP_ENDPOINT;
     
-    // Add role as query parameter if provided
-    const roleParam = role ? `?role=${encodeURIComponent(role)}` : '';
+    // Add appEndpoint and role as query parameters
+    const params = new URLSearchParams({
+      appEndpoint: appEndpoint
+    });
+    
+    if (role) {
+      params.append('role', role);
+    }
+    
     const authUrl = provider === 'google' 
-      ? `${baseUrl}/api/oauth/google${roleParam}`
-      : `${baseUrl}/api/oauth/facebook${roleParam}`;
+      ? `${baseUrl}/api/oauth/google?${params.toString()}`
+      : provider === 'facebook'
+      ? `${baseUrl}/api/oauth/facebook?${params.toString()}`
+      : `${baseUrl}/api/oauth/github?${params.toString()}`;
     
     window.location.href = authUrl;
   }, []);
