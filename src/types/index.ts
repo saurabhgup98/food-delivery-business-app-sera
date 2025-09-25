@@ -88,7 +88,9 @@ export interface AuthResponse {
   message: string;
   data: {
     user: User;
-    tokens: AuthTokens;
+    role?: string;
+    availableRoles?: string[];
+    appIdentifier?: string;
   };
 }
 
@@ -97,6 +99,7 @@ export interface LoginRequest {
   email: string;
   password: string;
   appEndpoint: string; // App URL endpoint (required for the authentication service)
+  selectedRole?: string; // Optional selected role for business app
 }
 
 export interface RegisterRequest {

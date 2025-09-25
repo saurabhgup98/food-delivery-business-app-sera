@@ -87,12 +87,12 @@ export const BusinessLoginForm: React.FC<BusinessLoginFormProps> = ({
       setIsSubmitting(true);
       clearError();
       
-      // Create login data with role
+      // Create login data with selected role
       const loginData = {
         email: formData.email,
         password: formData.password,
         appEndpoint: 'https://food-delivery-business-app-sera.vercel.app',
-        role: selectedRole
+        selectedRole: selectedRole
       };
       
       await login(loginData);

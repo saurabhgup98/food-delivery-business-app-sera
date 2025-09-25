@@ -34,6 +34,7 @@ export interface AuthResponse {
   data: {
     user: User;
     role?: string;
+    availableRoles?: string[];
     appIdentifier?: string;
   };
 }
@@ -42,7 +43,7 @@ export interface LoginRequest {
   email: string;
   password: string;
   appEndpoint: string;
-  role?: string;
+  selectedRole?: string;
 }
 
 export interface RegisterRequest {
