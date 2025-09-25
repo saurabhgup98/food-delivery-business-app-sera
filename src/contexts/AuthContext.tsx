@@ -15,7 +15,6 @@ interface AuthContextType {
   login: (credentials: LoginRequest) => Promise<AuthResponse>;
   register: (userData: RegisterRequest) => Promise<AuthResponse>;
   logout: () => Promise<void>;
-  refreshToken: () => Promise<void>;
   error: string | null;
   clearError: () => void;
 }
@@ -119,12 +118,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   };
 
-  const refreshToken = async (): Promise<void> => {
-    // Simple auth doesn't use token refresh
-    // This method is kept for compatibility but does nothing
-    return Promise.resolve();
-  };
-
   const clearError = (): void => {
     setError(null);
   };
@@ -136,7 +129,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     logout,
-    refreshToken,
     error,
     clearError,
   };

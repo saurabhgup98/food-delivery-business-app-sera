@@ -68,14 +68,14 @@ export interface AdminAccessData {
 // Authentication types
 export interface User {
   id: string;
-  name: string;
+  username?: string;
   email: string;
-  emailVerified: boolean;
-  oauthProvider: string;
-  role: string;
-  appEndpoint: string;
-  appIdentifier: string;
-  authMethod: string;
+  appRegistered: Array<{
+    appIdentifier: string;
+    role: string;
+    authMethod: string;
+    isActive: boolean;
+  }>;
 }
 
 export interface AuthTokens {

@@ -37,7 +37,6 @@ export const authApi = {
   register: (userData: RegisterRequest) => apiClient.auth.register(userData),
   login: (credentials: LoginRequest) => apiClient.auth.login(credentials),
   logout: () => apiClient.auth.logout(),
-  refreshToken: () => apiClient.auth.refreshAccessToken(),
   getUserProfile: () => apiClient.auth.getUserProfile(),
   isAuthenticated: () => apiClient.auth.isAuthenticated(),
   getCurrentUser: () => apiClient.auth.getCurrentUser(),
@@ -56,7 +55,7 @@ export const oauthApi = {
 export * from './types';
 export * from './utils';
 export * from './constants';
-export type { AuthResponse } from './auth';
+export type { AuthResponse } from './types';
 
 // Default export
 export default apiClient;

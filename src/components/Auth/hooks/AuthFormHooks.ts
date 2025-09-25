@@ -5,7 +5,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { FormData } from '../types/AuthFormTypes';
 import { validateForm, sanitizeFormData } from '../utils/AuthFormValidation';
 import { AUTH_FORM_CONSTANTS } from '../constants/AuthFormConstants';
-import { LoginRequest, RegisterRequest } from '../../../types';
+import { LoginRequest, RegisterRequest } from '../../../services/api/types';
 
 /**
  * Custom hook for managing form state
@@ -114,11 +114,10 @@ export const useAuthFormSubmission = (mode: 'login' | 'register') => {
         await login(loginData);
       } else {
         const registerData: RegisterRequest = {
-          name: sanitizedData.fullName,
+          username: sanitizedData.fullName,
           email: sanitizedData.email,
           password: sanitizedData.password,
           appEndpoint: AUTH_FORM_CONSTANTS.APP_ENDPOINT,
-          authMethod: 'email-password',
           role: AUTH_FORM_CONSTANTS.DEFAULT_ROLE,
         };
         await register(registerData);
@@ -187,10 +186,10 @@ export const useOAuthAuth = () => {
     }
     
     const authUrl = provider === 'google' 
-      ? `${baseUrl}/api/oauth/google?${params.toString()}`
+      ? `${baseUrl}/api/auth/google?${params.toString()}`
       : provider === 'facebook'
-      ? `${baseUrl}/api/oauth/facebook?${params.toString()}`
-      : `${baseUrl}/api/oauth/github?${params.toString()}`;
+      ? `${baseUrl}/api/auth/facebook?${params.toString()}`
+      : `${baseUrl}/api/auth/github?${params.toString()}`;
     
     window.location.href = authUrl;
   }, []);
