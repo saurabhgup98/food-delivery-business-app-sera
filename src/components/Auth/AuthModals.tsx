@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import { XIcon } from "../Icons";
 import { AuthModalsProps } from "./types/AuthFormTypes";
 import { useModalState, useFormMode } from "./hooks/AuthFormHooks";
 import { LoginForm } from "./forms/LoginForm";
 import { RegisterForm } from "./forms/RegisterForm";
+import { RoleSelectionForm } from "./forms/RoleSelectionForm";
 import { FormDivider } from "./components/FormDivider";
 import { FormModeSwitch } from "./components/FormModeSwitch";
 import { MODAL_TITLES, MODAL_SUBTITLES } from "./constants/authConstants";
@@ -17,6 +19,10 @@ export default function AuthModals({
   // Custom hooks for modal and form management
   const { isAnimating, handleClose } = useModalState(isOpen, onClose);
   const { switchMode } = useFormMode(mode, onModeChange);
+  
+  // State for login flow
+  const [showRoleSelection, setShowRoleSelection] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   // Handle successful authentication
   const handleAuthSuccess = () => {
@@ -25,6 +31,32 @@ export default function AuthModals({
     }
     onClose();
   };
+
+  // Handle role selection for login
+  const handleRoleSelect = (role: string) => {
+    setSelectedRole(role);
+    setShowRoleSelection(false);
+  };
+
+  // Handle back to role selection
+  const handleBackToRoleSelection = () => {
+    setShowRoleSelection(true);
+    setSelectedRole(null);
+  };
+
+
+  // Reset state when modal opens/closes
+  React.useEffect(() => {
+    if (isOpen) {
+      if (mode === 'login') {
+        setShowRoleSelection(true);
+        setSelectedRole(null);
+      } else {
+        setShowRoleSelection(false);
+        setSelectedRole(null);
+      }
+    }
+  }, [isOpen, mode]);
 
   if (!isOpen) return null;
 
@@ -51,7 +83,7 @@ export default function AuthModals({
           }`}
       >
         {/* Modal Content */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 rounded-2xl shadow-2xl border border-slate-600/30 overflow-hidden max-h-[90vh] flex flex-col">
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 rounded-2xl shadow-2xl border border-slate-600/30 overflow-hidden h-[80vh] flex flex-col">
           {/* Fixed Enhanced Header */}
           <div className="relative bg-gradient-to-r from-sera-blue via-sera-blue/90 to-sera-blue/80 px-6 py-4 flex-shrink-0 overflow-hidden">
             {/* Animated background pattern */}
@@ -84,11 +116,23 @@ export default function AuthModals({
           </div>
 
           {/* Scrollable Form Content */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
             <div className="p-6">
-              {/* Render appropriate form based on mode */}
+              {/* Render appropriate form based on mode and flow */}
               {mode === "login" ? (
-                <LoginForm onSuccess={handleAuthSuccess} />
+                showRoleSelection ? (
+                  <RoleSelectionForm 
+                    onRoleSelect={handleRoleSelect} 
+                    onModeSwitch={switchMode}
+                    mode={mode}
+                  />
+                ) : (
+                  <LoginForm 
+                    onSuccess={handleAuthSuccess} 
+                    selectedRole={selectedRole || undefined}
+                    onBackToRoleSelection={handleBackToRoleSelection}
+                  />
+                )
               ) : (
                 <>
                   <RegisterForm onSuccess={handleAuthSuccess} />
@@ -124,8 +168,10 @@ export default function AuthModals({
                 </>
               )}
 
-              {/* Mode Switch */}
-              <FormModeSwitch mode={mode} onModeSwitch={switchMode} />
+              {/* Mode Switch - Only show for register or when not in role selection */}
+              {mode === "register" || (mode === "login" && !showRoleSelection) ? (
+                <FormModeSwitch mode={mode} onModeSwitch={switchMode} />
+              ) : null}
             </div>
           </div>
         </div>

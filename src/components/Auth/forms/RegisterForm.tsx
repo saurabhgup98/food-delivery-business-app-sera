@@ -139,9 +139,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         <PrimarySubmitBtn
           btnProps={{
             name: isLoading ? "Creating account..." : "Create Account",
-            bgColor: "bg-sera-blue",
+            bgColor: "w-full bg-gradient-to-r from-sera-blue via-sera-blue/90 to-sera-blue/80",
             textColor: "text-white",
-            hoverBgColor: "hover:bg-sera-blue/90"
+            hoverBgColor: "hover:from-sera-blue/90 hover:via-sera-blue/80 hover:to-sera-blue/70",
+            border: "py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:shadow-sera-blue/20 hover:scale-[1.02] text-sm tracking-wide font-bold"
           }}
           isLoading={isLoading}
           disabled={isLoading}
