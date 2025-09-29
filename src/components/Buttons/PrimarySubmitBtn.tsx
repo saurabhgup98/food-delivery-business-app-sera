@@ -1,5 +1,3 @@
-// PrimarySubmitBtn.tsx - Submit button component for forms
-
 import React from 'react';
 import { PrimarySolidBtnProps } from './buttonData';
 

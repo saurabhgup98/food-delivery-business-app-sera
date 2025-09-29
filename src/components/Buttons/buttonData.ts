@@ -1,5 +1,3 @@
-// Simple button configuration data for consistent styling across the app
-
 export interface PrimarySolidBtnProps {
   name: string;
   bgColor: string;

@@ -1,105 +1,122 @@
-import React from 'react';
-import { AuthInput, SubmitButton, ErrorDisplay } from '../components/AuthFormFields';
-import { useFormState, useFormValidation, useAuthFormSubmission } from '../hooks/AuthFormHooks';
-import { FORM_LABELS, FORM_PLACEHOLDERS } from '../constants/AuthFormConstants';
-import { FormData } from '../types/AuthFormTypes';
+import React, { useState } from 'react';
+import { PrimaryInput } from '../../Input/PrimaryInput';
+import PrimarySubmitBtn from '../../Buttons/PrimarySubmitBtn';
+import { FormErrorDisplay } from '../components/FormErrorDisplay';
+import { useAuth } from '../../../contexts/AuthContext';
+import { VALIDATION_MESSAGES } from '../constants/authConstants';
 
 interface LoginFormProps {
-  onSuccess?: () => void;
-  onError?: (error: string) => void;
+  onSuccess: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onError }) => {
-  const initialFormData: FormData = {
-    fullName: '',
+export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
+  const { login, isLoading, error, clearError } = useAuth();
+  const [formData, setFormData] = useState({
     email: '',
-    password: '',
-    confirmPassword: '',
+    password: ''
+  });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  // Input configuration array
+  const inputConfigs = [
+    {
+      name: 'email',
+      type: 'email' as const,
+      placeholder: 'Email address',
+      value: formData.email,
+      error: validationErrors.email
+    },
+    {
+      name: 'password',
+      type: 'password' as const,
+      placeholder: 'Password',
+      value: formData.password,
+      error: validationErrors.password
+    }
+  ];
+
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    
+    if (!formData.email.trim()) {
+      errors.email = VALIDATION_MESSAGES.REQUIRED;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = VALIDATION_MESSAGES.EMAIL_INVALID;
+    }
+    
+    if (!formData.password.trim()) {
+      errors.password = VALIDATION_MESSAGES.REQUIRED;
+    } else if (formData.password.length < 8) {
+      errors.password = VALIDATION_MESSAGES.PASSWORD_MIN_LENGTH;
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  // Custom hooks for form management
-  const {
-    formData,
-    showPassword,
-    setShowPassword,
-    localError,
-    setLocalError,
-    handleInputChange,
-    clearError,
-  } = useFormState(initialFormData);
-
-  const { validateAllFields } = useFormValidation(formData, 'login');
-  const { submitForm, isSubmitting, error } = useAuthFormSubmission('login');
-
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalError(null);
     clearError();
-
-    // Validate form
-    const validation = validateAllFields();
-    if (!validation.isValid) {
-      setLocalError(validation.error || 'Please check your input');
-      return;
-    }
+    
+    if (!validateForm()) return;
 
     try {
-      await submitForm(formData, onSuccess);
-    } catch (error: any) {
-      const errorMessage = error.message || 'Login failed';
-      setLocalError(errorMessage);
-      if (onError) {
-        onError(errorMessage);
+      const response = await login({
+        email: formData.email,
+        password: formData.password,
+        appEndpoint: window.location.origin
+      });
+
+      if (response.success) {
+        onSuccess();
       }
+    } catch (error) {
+      console.error('Login error:', error);
     }
   };
 
-  // Toggle password visibility
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  // Create input configurations
-  const emailInputConfig = {
-    name: 'email',
-    value: formData.email,
-    onChange: handleInputChange,
-    placeholder: FORM_PLACEHOLDERS.EMAIL,
-    label: FORM_LABELS.EMAIL,
-    type: 'email' as const,
-    required: true,
-  };
-
-  const passwordInputConfig = {
-    name: 'password',
-    value: formData.password,
-    onChange: handleInputChange,
-    placeholder: FORM_PLACEHOLDERS.PASSWORD_LOGIN,
-    label: FORM_LABELS.PASSWORD,
-    type: 'password' as const,
-    required: true,
-    showPassword,
-    onTogglePassword: togglePasswordVisibility,
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear validation error for this field
+    if (validationErrors[field]) {
+      setValidationErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Error Display */}
-      <ErrorDisplay error={error || localError} />
+      {/* Dynamic Input Fields */}
+      {inputConfigs.map((config) => (
+        <div key={config.name}>
+          <PrimaryInput
+            name={config.name}
+            type={config.type}
+            placeholder={config.placeholder}
+            value={config.value}
+            onChange={(e) => handleInputChange(config.name, e.target.value)}
+            disabled={isLoading}
+            className={config.error ? 'border-red-500' : ''}
+          />
+          <FormErrorDisplay error={config.error} />
+        </div>
+      ))}
 
-      {/* Email Input */}
-      <AuthInput {...emailInputConfig} />
-
-      {/* Password Input */}
-      <AuthInput {...passwordInputConfig} />
+      {/* API Error Display */}
+      <FormErrorDisplay error={error} />
 
       {/* Submit Button */}
-      <SubmitButton 
-        isLoading={isSubmitting} 
-        mode="login" 
-        disabled={isSubmitting}
-      />
+      <div className="w-full">
+        <PrimarySubmitBtn
+          btnProps={{
+            name: isLoading ? "Signing in..." : "Sign In",
+            bgColor: "bg-sera-blue",
+            textColor: "text-white",
+            hoverBgColor: "hover:bg-sera-blue/90"
+          }}
+          isLoading={isLoading}
+          disabled={isLoading}
+        />
+      </div>
     </form>
   );
 };

@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { FormData } from '../types/AuthFormTypes';
-import { validateForm, sanitizeFormData } from '../utils/AuthFormValidation';
-import { AUTH_FORM_CONSTANTS } from '../constants/AuthFormConstants';
+import { API_ENDPOINTS } from '../constants/authConstants';
 import { LoginRequest, RegisterRequest } from '../../../services/api/types';
 
 /**
@@ -59,11 +58,19 @@ export const useFormValidation = (formData: FormData, mode: 'login' | 'register'
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const validateField = useCallback((fieldName: string, value: string) => {
-    const sanitizedData = sanitizeFormData({ ...formData, [fieldName]: value });
-    const validation = validateForm(sanitizedData, mode);
+    // Simple validation logic
+    let error = '';
     
-    if (!validation.isValid && validation.error) {
-      setValidationErrors(prev => ({ ...prev, [fieldName]: validation.error! }));
+    if (!value.trim()) {
+      error = 'This field is required';
+    } else if (fieldName === 'email' && !/\S+@\S+\.\S+/.test(value)) {
+      error = 'Please enter a valid email address';
+    } else if (fieldName === 'password' && value.length < 8) {
+      error = 'Password must be at least 8 characters';
+    }
+    
+    if (error) {
+      setValidationErrors(prev => ({ ...prev, [fieldName]: error }));
     } else {
       setValidationErrors(prev => {
         const newErrors = { ...prev };
@@ -74,9 +81,33 @@ export const useFormValidation = (formData: FormData, mode: 'login' | 'register'
   }, [formData, mode]);
 
   const validateAllFields = useCallback(() => {
-    const sanitizedData = sanitizeFormData(formData);
-    const validation = validateForm(sanitizedData, mode);
-    return validation;
+    const errors: Record<string, string> = {};
+    
+    if (!formData.email?.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    
+    if (!formData.password?.trim()) {
+      errors.password = 'Password is required';
+    } else if (formData.password.length < 8) {
+      errors.password = 'Password must be at least 8 characters';
+    }
+    
+    if (mode === 'register') {
+      if (!formData.fullName?.trim()) {
+        errors.fullName = 'Name is required';
+      }
+      if (!formData.confirmPassword?.trim()) {
+        errors.confirmPassword = 'Please confirm your password';
+      } else if (formData.password !== formData.confirmPassword) {
+        errors.confirmPassword = 'Passwords do not match';
+      }
+    }
+    
+    setValidationErrors(errors);
+    return { isValid: Object.keys(errors).length === 0, errors };
   }, [formData, mode]);
 
   const clearValidationErrors = useCallback(() => {
@@ -103,22 +134,19 @@ export const useAuthFormSubmission = (mode: 'login' | 'register') => {
     clearError();
 
     try {
-      const sanitizedData = sanitizeFormData(formData);
-
       if (mode === 'login') {
         const loginData: LoginRequest = {
-          email: sanitizedData.email,
-          password: sanitizedData.password,
-          appEndpoint: AUTH_FORM_CONSTANTS.APP_ENDPOINT,
+          email: formData.email,
+          password: formData.password,
+          appEndpoint: window.location.origin,
         };
         await login(loginData);
       } else {
         const registerData: RegisterRequest = {
-          username: sanitizedData.fullName,
-          email: sanitizedData.email,
-          password: sanitizedData.password,
-          appEndpoint: AUTH_FORM_CONSTANTS.APP_ENDPOINT,
-          role: AUTH_FORM_CONSTANTS.DEFAULT_ROLE,
+          email: formData.email,
+          password: formData.password,
+          appEndpoint: window.location.origin,
+          role: 'business-user',
         };
         await register(registerData);
       }
@@ -173,8 +201,8 @@ export const useModalState = (isOpen: boolean, onClose: () => void) => {
  */
 export const useOAuthAuth = () => {
   const handleOAuthLogin = useCallback((provider: 'google' | 'facebook' | 'github', role?: string) => {
-    const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'https://simple-authentication-service.vercel.app';
-    const appEndpoint = AUTH_FORM_CONSTANTS.APP_ENDPOINT;
+    const baseUrl = API_ENDPOINTS.BASE_URL;
+    const appEndpoint = window.location.origin;
     
     // Add appEndpoint and role as query parameters
     const params = new URLSearchParams({
@@ -186,10 +214,10 @@ export const useOAuthAuth = () => {
     }
     
     const authUrl = provider === 'google' 
-      ? `${baseUrl}/api/auth/google?${params.toString()}`
+      ? `${baseUrl}/api/oauth/google?${params.toString()}`
       : provider === 'facebook'
-      ? `${baseUrl}/api/auth/facebook?${params.toString()}`
-      : `${baseUrl}/api/auth/github?${params.toString()}`;
+      ? `${baseUrl}/api/oauth/facebook?${params.toString()}`
+      : `${baseUrl}/api/oauth/github?${params.toString()}`;
     
     window.location.href = authUrl;
   }, []);
