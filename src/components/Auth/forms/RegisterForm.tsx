@@ -90,6 +90,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 
     try {
       const response = await register({
+        username: formData.name,
         email: formData.email,
         password: formData.password,
         appEndpoint: window.location.origin,

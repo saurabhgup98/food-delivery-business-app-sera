@@ -58,6 +58,10 @@ export const FORM_CONSTANTS = {
   }
 } as const;
 
+// Export individual constants for backward compatibility
+export const MODAL_TITLES = FORM_CONSTANTS.MODAL_TITLES;
+export const MODAL_SUBTITLES = FORM_CONSTANTS.MODAL_SUBTITLES;
+
 // Form Validation Messages
 export const VALIDATION_MESSAGES = {
   REQUIRED: 'This field is required',
