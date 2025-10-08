@@ -1,9 +1,9 @@
 import FeatureCard from './FeatureCard';
-import { features } from '../../data/homePageData';
+import { FEATURES_CONFIG } from './config/featuresConfig';
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-dark-800 via-dark-700 to-dark-800 relative overflow-hidden">
+    <section id={FEATURES_CONFIG.sectionId} className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-dark-800 via-dark-700 to-dark-800 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-sera-blue/5 via-transparent to-sera-pink/5"></div>
@@ -16,23 +16,23 @@ export default function FeaturesSection() {
         <div className="text-center mb-16">
           <div className="inline-block mb-4">
             <span className="text-sera-blue text-sm font-semibold tracking-wider uppercase">
-              Why Choose SERA?
+              {FEATURES_CONFIG.header.badge}
             </span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-            Powerful Features for
+            {FEATURES_CONFIG.header.title}
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-sera-yellow to-sera-orange">
-              Modern Restaurants
+              {FEATURES_CONFIG.header.titleHighlight}
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Discover the comprehensive suite of tools designed to streamline your restaurant operations and boost your business growth.
+            {FEATURES_CONFIG.header.description}
           </p>
         </div>
-        
+
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
-          {features.map((feature, index) => (
+          {FEATURES_CONFIG.features.map((feature, index) => (
             <div
               key={index}
               className="animate-fade-in-up flex"

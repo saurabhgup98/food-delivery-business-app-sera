@@ -30,7 +30,15 @@ export class AuthService {
         );
 
         if (response.success && response.data?.user) {
-            setUserData(response.data.user);
+            // Store complete user object with role information
+            const completeUser = {
+                ...response.data.user,
+                role: response.data.role,
+                availableRoles: response.data.availableRoles,
+                appIdentifier: response.data.appIdentifier,
+                authMethod: response.data.authMethod
+            };
+            setUserData(completeUser);
         }
 
         return response as AuthResponse;

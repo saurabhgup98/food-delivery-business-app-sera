@@ -3,7 +3,8 @@ import { PrimaryInput } from '../../Input/PrimaryInput';
 import PrimarySubmitBtn from '../../Buttons/PrimarySubmitBtn';
 import { FormErrorDisplay } from '../components/FormErrorDisplay';
 import { useAuth } from '../../../contexts/AuthContext';
-import { VALIDATION_MESSAGES } from '../constants/authConstants';
+import { REGISTER_FORM_CONFIG } from './config/RegisterFormConfig';
+import { validateRegisterForm, ValidationErrors } from './validation/RegisterValidation';
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -11,73 +12,28 @@ interface RegisterFormProps {
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const { register, isLoading, error, clearError } = useAuth();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState(REGISTER_FORM_CONFIG.initialFormData);
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
-  // Input configuration array
-  const inputConfigs = [
-    {
-      name: 'name',
-      type: 'text' as const,
-      placeholder: 'Full name',
-      value: formData.name,
-      error: validationErrors.name
+  // PrimarySubmitBtn props
+  const submitBtnProps = {
+    btnProps: {
+      ...REGISTER_FORM_CONFIG.submitButtonProps,
+      name: isLoading ? "Creating account..." : REGISTER_FORM_CONFIG.submitButtonProps.name
     },
-    {
-      name: 'email',
-      type: 'email' as const,
-      placeholder: 'Email address',
-      value: formData.email,
-      error: validationErrors.email
-    },
-    {
-      name: 'password',
-      type: 'password' as const,
-      placeholder: 'Password',
-      value: formData.password,
-      error: validationErrors.password
-    },
-    {
-      name: 'confirmPassword',
-      type: 'password' as const,
-      placeholder: 'Confirm password',
-      value: formData.confirmPassword,
-      error: validationErrors.confirmPassword
-    }
-  ];
+    isLoading,
+    disabled: isLoading
+  };
+
+  // Input configuration array with dynamic values
+  const inputConfigs = REGISTER_FORM_CONFIG.inputConfigs.map(config => ({
+    ...config,
+    value: formData[config.name as keyof typeof formData],
+    error: validationErrors[config.name]
+  }));
 
   const validateForm = () => {
-    const errors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      errors.name = VALIDATION_MESSAGES.REQUIRED;
-    } else if (formData.name.trim().length < 2) {
-      errors.name = VALIDATION_MESSAGES.NAME_MIN_LENGTH;
-    }
-
-    if (!formData.email.trim()) {
-      errors.email = VALIDATION_MESSAGES.REQUIRED;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = VALIDATION_MESSAGES.EMAIL_INVALID;
-    }
-
-    if (!formData.password.trim()) {
-      errors.password = VALIDATION_MESSAGES.REQUIRED;
-    } else if (formData.password.length < 8) {
-      errors.password = VALIDATION_MESSAGES.PASSWORD_MIN_LENGTH;
-    }
-
-    if (!formData.confirmPassword.trim()) {
-      errors.confirmPassword = VALIDATION_MESSAGES.REQUIRED;
-    } else if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = VALIDATION_MESSAGES.PASSWORD_MISMATCH;
-    }
-
+    const errors = validateRegisterForm(formData);
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -136,17 +92,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 
       {/* Submit Button */}
       <div className="w-full">
-        <PrimarySubmitBtn
-          btnProps={{
-            name: isLoading ? "Creating account..." : "Create Account",
-            bgColor: "w-full bg-gradient-to-r from-sera-blue via-sera-blue/90 to-sera-blue/80",
-            textColor: "text-white",
-            hoverBgColor: "hover:from-sera-blue/90 hover:via-sera-blue/80 hover:to-sera-blue/70",
-            border: "py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:shadow-sera-blue/20 hover:scale-[1.02] text-sm tracking-wide font-bold"
-          }}
-          isLoading={isLoading}
-          disabled={isLoading}
-        />
+        <PrimarySubmitBtn {...submitBtnProps} />
       </div>
     </form>
   );

@@ -8,14 +8,14 @@ interface FormModeSwitchProps {
   className?: string;
 }
 
-export const FormModeSwitch: React.FC<FormModeSwitchProps> = ({ 
-  mode, 
+export const FormModeSwitch: React.FC<FormModeSwitchProps> = ({
+  mode,
   onModeSwitch,
   onRoleSelection,
-  className = "" 
+  className = ""
 }) => {
   const switchConfig = FORM_CONSTANTS.MODE_SWITCH[mode.toUpperCase() as keyof typeof FORM_CONSTANTS.MODE_SWITCH];
-  
+
   return (
     <div className={`text-center mt-6 ${className}`}>
       <p className="text-gray-400 text-sm">
@@ -28,7 +28,7 @@ export const FormModeSwitch: React.FC<FormModeSwitchProps> = ({
           {switchConfig.action}
         </button>
       </p>
-      
+
       {/* Role Selection Button */}
       {onRoleSelection && (
         <div className="mt-4">

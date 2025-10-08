@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
-import HomePage from './components/HomePage/HomePage';
+import HomePage from './pages/Home';
 import { Dashboard, Restaurants, Users, Payments } from './components/Pages';
 import AdminConsole from './components/Pages/AdminConsole';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
