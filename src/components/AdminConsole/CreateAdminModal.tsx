@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserPlusIcon } from '../Icons';
+import { UserPlusIcon } from '../../assets/Icons';
 
 interface NewAdminForm {
   name: string;

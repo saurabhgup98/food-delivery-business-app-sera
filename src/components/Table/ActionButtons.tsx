@@ -1,9 +1,9 @@
 import React from 'react';
 import { User } from '../../data/usersData';
 import { ACTION_BUTTONS } from './config/UserListConfig';
-import ViewIcon from '../Icons/ViewIcon';
-import EditIcon from '../Icons/EditIcon';
-import DeleteIcon from '../Icons/DeleteIcon';
+import ViewIcon from '../../assets/Icons/ViewIcon';
+import EditIcon from '../../assets/Icons/EditIcon';
+import DeleteIcon from '../../assets/Icons/DeleteIcon';
 
 interface ActionButtonsProps {
   user: User;

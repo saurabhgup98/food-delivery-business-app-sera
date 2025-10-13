@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BellIcon } from '../Icons';
+import { BellIcon } from '../../assets/Icons';
 
 interface NotificationsDropdownProps {
   notificationCount: number;

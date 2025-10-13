@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { 
   MenuIcon,
   XIcon
-} from '../Icons';
-import { PrimarySolidBtn, buttonData } from '../Buttons';
+} from '../../assets/Icons';
+import PrimaryIconTextBtn from '../Buttons/PrimaryIconTextBtn';
+import { LoginIcon } from '../../assets/LoginIcon';
+import { UserPlusIcon } from '../../assets/UserPlusIcon';
 import PrimaryHorizontalNavbar from './PrimaryHorizontalNavbar';
 import { headerData } from './headerData';
 import Logo from './Logo';
@@ -117,15 +119,28 @@ const Header: React.FC<HeaderProps> = ({
             {/* Right Side - Conditional Content Based on Auth Status */}
             {!isAuthenticated ? (
               /* Non-logged User: Show only Login/Register buttons */
-              <div className="flex items-center space-x-2">
-                <PrimarySolidBtn 
-                  btnProps={buttonData.LoginBtnProps}
-                  onClick={handleLogin}
-                />
-                <PrimarySolidBtn 
-                  btnProps={buttonData.RegisterBtnProps}
-                  onClick={handleRegister}
-                />
+              <div className="flex items-center space-x-3">
+                <div className="w-20 h-9">
+                  <PrimaryIconTextBtn
+                    text="Login"
+                    onClick={handleLogin}
+                    bgColor="bg-pink-200/30"
+                    hoverBgColor="hover:bg-pink-200/40"
+                    textColor="text-white"
+                    className="text-sm font-medium"
+                  />
+                </div>
+                <div className="w-24 h-9">
+                  <PrimaryIconTextBtn
+                    text="Register"
+                    onClick={handleRegister}
+                    isSolid={true}
+                    bgColor="bg-yellow-400"
+                    hoverBgColor="hover:bg-yellow-500"
+                    textColor="text-black"
+                    className="text-sm font-medium"
+                  />
+                </div>
               </div>
             ) : (
               /* Logged User: Show search, notifications, and profile */

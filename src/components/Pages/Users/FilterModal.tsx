@@ -1,4 +1,13 @@
 import { useState } from 'react';
+import { FILTER_MODAL_CONFIG } from './config/FilterModalConfig';
+import PrimaryIconBtn from '../../Buttons/PrimaryIconBtn';
+import PrimaryIconTextBtn from '../../Buttons/PrimaryIconTextBtn';
+import SecondarySearchButton from '../../Buttons/SecondarySearchButton';
+import { CloseIcon } from '../../../assets/CloseIcon';
+import { SearchIcon } from '../../../assets/SearchIcon';
+import { ResetIcon } from '../../../assets/ResetIcon';
+import { CheckIcon } from '../../../assets/CheckIcon';
+import SectionHeaderPrimary from '../../Header/SectionHeaderPrimary';
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -7,12 +16,7 @@ interface FilterModalProps {
 }
 
 export default function FilterModal({ isOpen, onClose, onApplyFilters }: FilterModalProps) {
-  const [filters, setFilters] = useState({
-    status: '',
-    role: '',
-    dateRange: '',
-    searchTerm: ''
-  });
+  const [filters, setFilters] = useState(FILTER_MODAL_CONFIG.initialFilters);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -24,12 +28,7 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters }: FilterM
   };
 
   const handleReset = () => {
-    setFilters({
-      status: '',
-      role: '',
-      dateRange: '',
-      searchTerm: ''
-    });
+    setFilters(FILTER_MODAL_CONFIG.initialFilters);
     onApplyFilters({});
     onClose();
   };
@@ -37,118 +36,115 @@ export default function FilterModal({ isOpen, onClose, onApplyFilters }: FilterM
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gradient-to-br from-dark-800 via-dark-700 to-dark-600 border border-sera-pink/30 rounded-2xl shadow-2xl w-full max-w-md">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-lg z-50 flex items-center justify-center p-4 animate-fade-in">
+      <div className="bg-gradient-to-br from-dark-800 via-dark-700 to-dark-600 border border-sera-pink/40 rounded-3xl shadow-2xl shadow-sera-pink/20 w-full max-w-md h-[80vh] flex flex-col animate-slide-up">
+
         {/* Header */}
-        <div className="bg-gradient-to-br from-sera-pink/60 via-sera-orange/50 to-sera-yellow/55 border-b-2 border-sera-pink/50 rounded-t-2xl p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-white/40 to-white/20 rounded-lg flex items-center justify-center shadow-lg border border-white/40 backdrop-blur-sm">
-                <span className="text-white text-sm drop-shadow-sm">🔍</span>
-              </div>
-              <div>
-                <h3 className="text-white font-bold text-lg drop-shadow-sm tracking-wide">Filter Users</h3>
-                <p className="text-white/90 text-xs tracking-wide">Refine your search results</p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-200"
-            >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        <SectionHeaderPrimary
+          icon={FILTER_MODAL_CONFIG.header.icon}
+          heading={FILTER_MODAL_CONFIG.header.title}
+          subHeading={FILTER_MODAL_CONFIG.header.subtitle}
+          rightSideAction={{
+            component: <div className="w-8 h-8"><PrimaryIconBtn icon={CloseIcon} /></div>,
+            onClick: onClose
+          }}
+          className="rounded-t-3xl"
+        />
 
         {/* Content */}
-        <div className="p-6 space-y-6">
-          {/* Status Filter */}
-          <div>
-            <label className="block text-white font-semibold text-sm mb-3">Status</label>
-            <div className="grid grid-cols-2 gap-2">
-              {['active', 'inactive', 'pending', 'suspended'].map((status) => (
-                <button
-                  key={status}
-                  onClick={() => handleFilterChange('status', filters.status === status ? '' : status)}
-                  className={`p-3 rounded-lg border transition-all duration-200 ${
-                    filters.status === status
-                      ? 'bg-sera-pink/20 border-sera-pink/50 text-sera-pink'
-                      : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20'
-                  }`}
-                >
-                  <span className="text-sm font-medium capitalize">{status}</span>
-                </button>
-              ))}
+        <div className="p-6 space-y-8 flex-1 overflow-y-auto custom-scrollbar">
+          {FILTER_MODAL_CONFIG.filters.map((filter, index) => (
+            <div key={filter.key} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+              <label className="block text-white font-semibold text-sm mb-4 flex items-center">
+                <div className="w-1 h-4 bg-gradient-to-b from-sera-pink to-sera-orange rounded-full mr-3"></div>
+                {filter.label}
+              </label>
+
+              {filter.type === 'buttons' && filter.options && (
+                <div className={`grid gap-3 ${filter.gridCols === 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                  {filter.options.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleFilterChange(filter.key, filters[filter.key as keyof typeof filters] === option.value ? '' : option.value)}
+                      className={`group relative p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 ${filters[filter.key as keyof typeof filters] === option.value
+                          ? filter.key === 'status'
+                            ? 'bg-gradient-to-r from-sera-pink/20 to-sera-pink/10 border-sera-pink/60 text-sera-pink shadow-lg shadow-sera-pink/20'
+                            : 'bg-gradient-to-r from-sera-blue/20 to-sera-blue/10 border-sera-blue/60 text-sera-blue shadow-lg shadow-sera-blue/20'
+                          : 'bg-white/5 border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/40 hover:text-white'
+                        }`}
+                    >
+                      <span className="text-sm font-medium relative z-10">{option.label}</span>
+                      {filters[filter.key as keyof typeof filters] === option.value && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-xl animate-pulse"></div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {filter.type === 'select' && filter.options && (
+                <div className="relative">
+                  <select
+                    value={filters[filter.key as keyof typeof filters]}
+                    onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                    className="w-full p-4 bg-white/10 border-2 border-white/20 rounded-xl text-white focus:border-sera-pink/50 focus:ring-4 focus:ring-sera-pink/20 transition-all duration-300 appearance-none cursor-pointer hover:bg-white/15"
+                  >
+                    {filter.options.map((option) => (
+                      <option key={option.value} value={option.value} className="bg-dark-800 text-white">
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+
+              {filter.type === 'input' && (
+                <div className="h-10">
+                  <SecondarySearchButton
+                    placeholder={filter.placeholder}
+                    icon={SearchIcon}
+                    iconColor="text-gray-400"
+                    inputBg="bg-white/10"
+                    inputHoverBg="hover:bg-white/15"
+                    border="border-2"
+                    borderColor="border-white/20"
+                    borderHoverColor="border-sera-pink/50"
+                    onClick={(searchTerm) => handleFilterChange(filter.key, searchTerm)}
+                  />
+                </div>
+              )}
             </div>
-          </div>
-
-          {/* Role Filter */}
-          <div>
-            <label className="block text-white font-semibold text-sm mb-3">Role</label>
-            <div className="grid grid-cols-2 gap-2">
-              {['customer', 'restaurant_owner', 'admin'].map((role) => (
-                <button
-                  key={role}
-                  onClick={() => handleFilterChange('role', filters.role === role ? '' : role)}
-                  className={`p-3 rounded-lg border transition-all duration-200 ${
-                    filters.role === role
-                      ? 'bg-sera-blue/20 border-sera-blue/50 text-sera-blue'
-                      : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20'
-                  }`}
-                >
-                  <span className="text-sm font-medium capitalize">{role.replace('_', ' ')}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Date Range Filter */}
-          <div>
-            <label className="block text-white font-semibold text-sm mb-3">Date Range</label>
-            <select
-              value={filters.dateRange}
-              onChange={(e) => handleFilterChange('dateRange', e.target.value)}
-              className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-sera-pink/50 focus:ring-2 focus:ring-sera-pink/20 transition-all duration-200"
-            >
-              <option value="">All Time</option>
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="quarter">This Quarter</option>
-              <option value="year">This Year</option>
-            </select>
-          </div>
-
-          {/* Search Term */}
-          <div>
-            <label className="block text-white font-semibold text-sm mb-3">Search Term</label>
-            <input
-              type="text"
-              value={filters.searchTerm}
-              onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-              placeholder="Search by name, email..."
-              className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:border-sera-pink/50 focus:ring-2 focus:ring-sera-pink/20 transition-all duration-200"
-            />
-          </div>
+          ))}
         </div>
 
         {/* Footer */}
-        <div className="bg-gradient-to-r from-dark-700/50 to-dark-600/50 border-t border-white/10 rounded-b-2xl p-4">
-          <div className="flex items-center justify-between space-x-3">
-            <button
-              onClick={handleReset}
-              className="flex-1 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white font-semibold transition-all duration-200"
-            >
-              Reset
-            </button>
-            <button
-              onClick={handleApply}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-sera-pink to-sera-orange hover:from-sera-pink/80 hover:to-sera-orange/80 rounded-lg text-white font-semibold transition-all duration-200 shadow-lg shadow-sera-pink/20"
-            >
-              Apply Filters
-            </button>
+        <div className="bg-gradient-to-r from-dark-700/90 to-dark-600/90 border-t border-white/20 rounded-b-3xl p-6 flex-shrink-0">
+          <div className="flex items-center justify-between space-x-4 h-10">
+            <div className="flex-1 h-full">
+              <PrimaryIconTextBtn
+                text="Reset"
+                leftIcon={ResetIcon}
+                onClick={handleReset}
+                className="border-2 border-white/30 hover:border-white/50"
+                bgColor="bg-white/10"
+                hoverBgColor="hover:bg-white/20"
+              />
+            </div>
+            <div className="flex-1 h-full">
+              <PrimaryIconTextBtn
+                text="Apply Filters"
+                leftIcon={CheckIcon}
+                onClick={handleApply}
+                isSolid={true}
+                bgColor="bg-gradient-to-r from-sera-pink to-sera-orange"
+                hoverBgColor="hover:from-sera-pink/90 hover:to-sera-orange/90"
+              />
+            </div>
           </div>
         </div>
       </div>

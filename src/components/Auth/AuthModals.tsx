@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { XIcon } from "../Icons";
+import { XIcon } from "../../assets/Icons";
 import { AuthModalsProps } from "./types/AuthFormTypes";
 import { useModalState, useFormMode } from "./hooks/AuthFormHooks";
 import { LoginForm } from "./forms/LoginForm";

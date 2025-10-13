@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchIcon, UserPlusIcon } from '../Icons';
+import { SearchIcon, UserPlusIcon } from '../../assets/Icons';
 
 interface AdminConsoleHeaderProps {
   searchTerm: string;

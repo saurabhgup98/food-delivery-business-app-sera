@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SearchIcon } from '../Icons';
+import { SearchIcon } from '../../assets/Icons';
 
 interface PrimarySearchBarProps {
   placeholder: string;

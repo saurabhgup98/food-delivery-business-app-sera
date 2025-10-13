@@ -6,19 +6,25 @@ const SectionHeaderPrimary: React.FC<SectionHeaderPrimaryProps> = ({
     icon,
     heading,
     subHeading,
-    rightSideDot,
-    rightSideText,
+    rightSideContent,
+    rightSideAction,
     size = 'medium',
     className = '',
     isExpandable = false,
     isExpanded = false,
     onToggle
 }) => {
+
     const config = SIZE_CONFIG[size];
-    const dotConfig = rightSideDot ? DOT_COLOR_CONFIG[rightSideDot.color] : null;
+    const dotConfig = rightSideContent?.dot ? DOT_COLOR_CONFIG[rightSideContent.dot.color] : null;
+
+    // Validation: Both rightSideContent and rightSideAction cannot be provided
+    if (rightSideContent && rightSideAction) {
+        console.warn('SectionHeaderPrimary: Both rightSideContent and rightSideAction cannot be provided. Only one should be used.');
+    }
 
     return (
-        <div 
+        <div
             className={`bg-gradient-to-br from-sera-pink/60 via-sera-orange/50 to-sera-yellow/55 border-b-2 border-sera-pink/50 relative z-10 flex-shrink-0 ${isExpandable ? 'cursor-pointer hover:bg-gradient-to-r hover:from-sera-pink/70 hover:to-sera-orange/60 transition-all duration-300' : ''} ${className}`}
             onClick={isExpandable ? onToggle : undefined}
         >
@@ -41,32 +47,44 @@ const SectionHeaderPrimary: React.FC<SectionHeaderPrimaryProps> = ({
                         </div>
                     </div>
 
-                    {/* Right Side - Optional Dot, Text, and Expand Arrow */}
-                    {(rightSideDot || rightSideText || isExpandable) && (
+                    {/* Right Side - Content, Action, or Expand Arrow */}
+                    {(rightSideContent || rightSideAction || isExpandable) && (
                         <div className="flex items-center space-x-2">
-                            {/* Optional Dot */}
-                            {rightSideDot && (
-                                <div className="flex items-center space-x-1">
-                                    <div className={`w-3 h-3 ${dotConfig?.dot} rounded-full animate-pulse shadow-lg ${dotConfig?.shadow}`}></div>
-                                    <span className={`${dotConfig?.text} text-xs font-bold tracking-wide`}>
-                                        {rightSideDot.text}
-                                    </span>
+                            {/* Right Side Content (dot and/or text) */}
+                            {rightSideContent && (
+                                <div className="flex items-center space-x-2">
+                                    {/* Optional Dot */}
+                                    {rightSideContent.dot && (
+                                        <div className="flex items-center space-x-1">
+                                            <div className={`w-3 h-3 ${dotConfig?.dot} rounded-full animate-pulse shadow-lg ${dotConfig?.shadow}`}></div>
+                                            <span className={`${dotConfig?.text} text-xs font-bold tracking-wide`}>
+                                                {rightSideContent.dot.text}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* Optional Right Side Text */}
+                                    {rightSideContent.text && (
+                                        <span className="text-white/90 text-xs font-bold tracking-wide">
+                                            {rightSideContent.text}
+                                        </span>
+                                    )}
                                 </div>
                             )}
 
-                            {/* Optional Right Side Text */}
-                            {rightSideText && (
-                                <span className="text-white/90 text-xs font-bold tracking-wide">
-                                    {rightSideText}
-                                </span>
+                            {/* Right Side Action Component */}
+                            {rightSideAction && (
+                                <div onClick={rightSideAction.onClick}>
+                                    {rightSideAction.component}
+                                </div>
                             )}
 
                             {/* Expand/Collapse Arrow */}
                             {isExpandable && (
-                                <svg 
+                                <svg
                                     className={`w-5 h-5 text-white/70 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
-                                    fill="none" 
-                                    stroke="currentColor" 
+                                    fill="none"
+                                    stroke="currentColor"
                                     viewBox="0 0 24 24"
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

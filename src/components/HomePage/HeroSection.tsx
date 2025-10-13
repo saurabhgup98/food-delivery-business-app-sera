@@ -1,6 +1,7 @@
-import SecondarySolidBtn from '../Buttons/SecondarySolidBtn';
-import OutlineTextBtn from '../Buttons/OutlineBtn';
+import PrimaryIconTextBtn from '../Buttons/PrimaryIconTextBtn';
 import { HERO_SECTION_CONFIG } from './config/HeroSectionConfig';
+import { ArrowRightIcon } from '../../assets/ArrowRightIcon';
+import { PlayIcon } from '../../assets/PlayIcon';
 
 interface HeroSectionProps {
   onRegisterClick?: () => void;
@@ -49,18 +50,31 @@ export default function HeroSection({ onRegisterClick }: HeroSectionProps) {
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center animate-fade-in-up delay-800">
           {/* Primary Button - Yellow Solid */}
-          <div className="w-full sm:w-48 h-12 sm:h-14">
-            <SecondarySolidBtn
-              {...HERO_SECTION_CONFIG.primaryButton}
+          <div className="w-full sm:w-48 h-10">
+            <PrimaryIconTextBtn
+              text={HERO_SECTION_CONFIG.primaryButton.text}
+              rightIcon={ArrowRightIcon}
               onClick={onRegisterClick}
+              isSolid={true}
+              bgColor="bg-sera-yellow"
+              hoverBgColor="hover:bg-sera-yellow/90"
+              textColor="text-dark-900"
+              rightIconColor="text-dark-900"
             />
           </div>
           
           {/* Secondary Button - Yellow Outline */}
-          <div className="w-full sm:w-48 h-12 sm:h-14">
-            <OutlineTextBtn
-              {...HERO_SECTION_CONFIG.secondaryButton}
+          <div className="w-full sm:w-48 h-10">
+            <PrimaryIconTextBtn
+              text={HERO_SECTION_CONFIG.secondaryButton.text}
+              leftIcon={PlayIcon}
               onClick={handleScrollToSection}
+              className="border-2 border-sera-yellow hover:border-sera-yellow"
+              textColor="text-sera-yellow"
+              leftIconColor="text-sera-yellow"
+              hoverBgColor="hover:bg-sera-yellow"
+              textHoverColor="hover:text-dark-900"
+              leftIconHoverColor="hover:text-dark-900"
             />
           </div>
         </div>

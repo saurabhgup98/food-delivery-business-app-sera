@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldIcon, ShieldCheckIcon, ShieldXIcon, UsersIcon } from '../Icons';
+import { ShieldIcon, ShieldCheckIcon, ShieldXIcon, UsersIcon } from '../../assets/Icons';
 
 interface AdminUser {
   id: string;

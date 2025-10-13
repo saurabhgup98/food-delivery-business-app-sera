@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { UserIcon, LogOutIcon, SettingsIcon, ShieldIcon, HelpIcon } from '../Icons';
+import { UserIcon, LogOutIcon, SettingsIcon, ShieldIcon, HelpIcon } from '../../assets/Icons';
 import { AdminUser } from './headerData';
 
 interface AdminProfileProps {
