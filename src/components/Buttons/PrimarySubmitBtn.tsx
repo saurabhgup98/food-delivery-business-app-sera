@@ -1,41 +1,61 @@
 import React from 'react';
-import { PrimarySolidBtnProps } from './buttonData';
+import { BUTTON_STYLES } from '../styles/buttonStyles';
 
 interface PrimarySubmitBtnProps {
-  btnProps: PrimarySolidBtnProps;
+  text?: string;
   isLoading?: boolean;
   loadingText?: string;
   disabled?: boolean;
-  children?: React.ReactNode;
   onClick?: () => void;
+  variant?: 'primary' | 'yellow' | 'pink';
 }
 
 const PrimarySubmitBtn: React.FC<PrimarySubmitBtnProps> = ({
-  btnProps,
+  text = 'Submit',
   isLoading = false,
   loadingText,
   disabled = false,
-  children,
   onClick,
+  variant = 'primary'
 }) => {
-  const { bgColor, textColor, hoverBgColor, hoverTextColor, border, name } = btnProps;
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'yellow':
+        return {
+          bgColor: BUTTON_STYLES.colors.solid.yellow,
+          textColor: BUTTON_STYLES.colors.text.dark
+        };
+      case 'pink':
+        return {
+          bgColor: BUTTON_STYLES.colors.solid.pink,
+          textColor: BUTTON_STYLES.colors.text.white
+        };
+      default:
+        return {
+          bgColor: BUTTON_STYLES.colors.solid.primary,
+          textColor: BUTTON_STYLES.colors.text.white
+        };
+    }
+  };
+
+  const variantStyles = getVariantStyles();
 
   const getButtonText = () => {
     if (isLoading) {
       return loadingText || 'Loading...';
     }
-    return children || name;
+    return text;
   };
 
   return (
     <button
       type="submit"
       className={`
-        px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200
-        ${bgColor} ${textColor} ${hoverBgColor} ${hoverTextColor || ''} ${border || ''}
-        hover:scale-105 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5
+        ${BUTTON_STYLES.base.container} ${BUTTON_STYLES.padding.medium} ${BUTTON_STYLES.sizes.small}
+        ${variantStyles.bgColor} ${variantStyles.textColor}
+        shadow-lg hover:shadow-xl transform hover:-translate-y-0.5
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sera-blue
-        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+        ${disabled || isLoading ? BUTTON_STYLES.base.disabled : BUTTON_STYLES.base.enabled}
         backdrop-blur-sm
       `.trim()}
       onClick={onClick}

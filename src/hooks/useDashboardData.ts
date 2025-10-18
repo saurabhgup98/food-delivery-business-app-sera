@@ -22,7 +22,7 @@ export const useDashboardData = (): UseDashboardDataReturn => {
       setRevenue(revenueData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch revenue data');
-      console.error('Error fetching revenue:', err);
+      // Handle error fetching revenue
     } finally {
       setLoading(false);
     }

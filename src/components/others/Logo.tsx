@@ -1,5 +1,5 @@
 import React from 'react';
-import { headerData } from './headerData';
+import { headerData } from '../Header/headerData';
 
 interface LogoProps {
   onClick?: () => void;

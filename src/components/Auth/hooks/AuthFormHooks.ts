@@ -146,7 +146,7 @@ export const useAuthFormSubmission = (mode: 'login' | 'register') => {
           email: formData.email,
           password: formData.password,
           appEndpoint: window.location.origin,
-          role: 'business-user',
+          role: 'business-user', // Only business-user allowed for registration
         };
         await register(registerData);
       }
@@ -156,7 +156,7 @@ export const useAuthFormSubmission = (mode: 'login' | 'register') => {
         onSuccess();
       }
     } catch (error: any) {
-      console.error('Form submission error:', error);
+      // Handle form submission error
       throw error;
     } finally {
       setIsSubmitting(false);

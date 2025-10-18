@@ -11,3 +11,4 @@ export { default as UserPlusIcon } from './UserPlusIcon';
 export { default as ShieldCheckIcon } from './ShieldCheckIcon';
 export { default as ShieldXIcon } from './ShieldXIcon';
 export { default as UsersIcon } from './UsersIcon';
+export { default as DropdownArrowDownIcon } from '../DropdownArrowDownIcon';

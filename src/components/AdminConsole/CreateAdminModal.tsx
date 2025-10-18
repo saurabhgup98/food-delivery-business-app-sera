@@ -34,7 +34,7 @@ const CreateAdminModal: React.FC<CreateAdminModalProps> = ({
       setFormData({ name: '', email: '', password: '' });
       onClose();
     } catch (error) {
-      console.error('Error creating admin:', error);
+      // Handle error creating admin
     } finally {
       setIsLoading(false);
     }

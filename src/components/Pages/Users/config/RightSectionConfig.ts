@@ -14,9 +14,11 @@ export const createRecentActivityHeaderConfig = (): SectionHeaderPrimaryProps =>
   icon: "🕒",
   heading: "Recent Activity",
   subHeading: "Last 24 hours",
-  rightSideDot: {
-    color: 'amber',
-    text: 'Active'
+  rightSideContent: {
+    dot: {
+      color: 'amber',
+      text: 'Active'
+    }
   },
   size: 'small'
 });

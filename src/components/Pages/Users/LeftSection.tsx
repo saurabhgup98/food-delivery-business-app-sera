@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { User } from '../../../data/usersData';
 import SectionHeaderPrimary from '../../Header/SectionHeaderPrimary';
-import PrimaryStatCard from '../../Cards/PrimaryStatCard';
-import PrimaryInfoCard from '../../Cards/PrimaryInfoCard';
+import { MetricCardPrimary, UserProfileCardPrimary } from '../../Cards';
 import { createHeaderConfig, createUserStatsCardsConfig, createUserStatsHeaderConfig, createRecentUsersHeaderConfig } from './config/LeftSectionConfig';
 import { getStatusColor, getRoleColor, calculateTotalRevenue } from './functions/LeftSectionUtils';
 
@@ -47,7 +46,7 @@ export default function LeftSection({ users }: LeftSectionProps) {
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isStatsExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
             <div className="px-4 pb-4 pt-2 space-y-3">
               {userStatsCardsConfig.map((stat, index) => (
-                <PrimaryStatCard
+                <MetricCardPrimary
                   key={index}
                   icon={stat.icon}
                   title={stat.title}
@@ -70,7 +69,7 @@ export default function LeftSection({ users }: LeftSectionProps) {
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isRecentUsersExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
             <div className="px-4 pb-4 pt-2 space-y-3">
               {users.slice(0, 5).map((user) => (
-                <PrimaryInfoCard
+                <UserProfileCardPrimary
                   key={user.id}
                   name={user.name}
                   status={user.status}

@@ -56,17 +56,17 @@ const Dashboard: React.FC = () => {
 
   // Show loading state if revenue is being fetched
   if (revenueLoading) {
-    console.log('Loading revenue data...');
+    // Loading revenue data
   }
 
   // Log error if revenue fetch failed
   if (revenueError) {
-    console.error('Revenue fetch error:', revenueError);
+    // Handle revenue fetch error
   }
 
   // Log error if activities fetch failed
   if (activitiesError) {
-    console.error('Activities fetch error:', activitiesError);
+    // Handle activities fetch error
   }
 
   return (

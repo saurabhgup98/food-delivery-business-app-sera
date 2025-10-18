@@ -15,7 +15,7 @@ export interface UserStatsCardConfig {
   subtitle: string;
   value: string;
   change: string;
-  color: 'emerald' | 'blue' | 'amber' | 'rose';
+  color: 'emerald' | 'blue' | 'amber' | 'rose' | 'purple';
 }
 
 // Function to create header configuration
@@ -23,9 +23,11 @@ export const createHeaderConfig = (users: User[]): SectionHeaderPrimaryProps => 
   icon: "👥",
   heading: "User Statistics",
   subHeading: `${users.length} total users`,
-  rightSideDot: {
-    color: 'emerald',
-    text: 'Live'
+  rightSideContent: {
+    dot: {
+      color: 'emerald',
+      text: 'Live'
+    }
   },
   size: 'medium'
 });
@@ -49,7 +51,7 @@ export const createQuickStatsConfig = (users: User[]): QuickStatsConfig[] => {
   ];
 };
 
-// Function to create user stats cards configuration
+// Function to create user stats cards configuration (Left Section - Activity Cards)
 export const createUserStatsCardsConfig = (): UserStatsCardConfig[] => {
   return [
     {
@@ -61,28 +63,52 @@ export const createUserStatsCardsConfig = (): UserStatsCardConfig[] => {
       color: 'emerald'
     },
     {
-      icon: '🆕',
-      title: 'New Today',
-      subtitle: 'Last 24 hours',
-      value: '23',
-      change: '+15%',
-      color: 'blue'
-    },
-    {
       icon: '⏳',
-      title: 'Pending',
-      subtitle: 'Awaiting approval',
+      title: 'Pending Approvals',
+      subtitle: 'Awaiting admin approval',
       value: '12',
       change: '-2%',
       color: 'amber'
     },
     {
       icon: '⚠️',
-      title: 'Suspended',
+      title: 'Suspended Users',
       subtitle: 'Need attention',
       value: '5',
       change: '+1',
       color: 'rose'
+    },
+    {
+      icon: '🆕',
+      title: 'New Users Today',
+      subtitle: 'Last 24 hours',
+      value: '23',
+      change: '+15%',
+      color: 'blue'
+    },
+    {
+      icon: '📅',
+      title: 'New This Weekend',
+      subtitle: 'Friday-Sunday',
+      value: '67',
+      change: '+22%',
+      color: 'blue'
+    },
+    {
+      icon: '📊',
+      title: 'New This Month',
+      subtitle: 'Current month',
+      value: '456',
+      change: '+18%',
+      color: 'emerald'
+    },
+    {
+      icon: '🎯',
+      title: 'New This Year',
+      subtitle: 'Current year',
+      value: '2,340',
+      change: '+45%',
+      color: 'purple'
     }
   ];
 };
@@ -95,9 +121,11 @@ export const createUserStatsHeaderConfig = (isExpanded: boolean, onToggle: () =>
   isExpandable: true,
   isExpanded,
   onToggle,
-  rightSideDot: {
-    color: 'blue' as const,
-    text: 'Live'
+  rightSideContent: {
+    dot: {
+      color: 'blue' as const,
+      text: 'Live'
+    }
   },
   size: 'medium' as const,
   className: "bg-gradient-to-br from-blue-500/20 via-blue-600/15 to-blue-700/10 border-b-2 border-blue-500/30"
@@ -111,7 +139,9 @@ export const createRecentUsersHeaderConfig = (users: User[], isExpanded: boolean
   isExpandable: true,
   isExpanded,
   onToggle,
-  rightSideText: `${users.length} total`,
+  rightSideContent: {
+    text: `${users.length} total`
+  },
   size: 'medium' as const,
   className: "bg-gradient-to-br from-emerald-500/20 via-emerald-600/15 to-emerald-700/10 border-b-2 border-emerald-500/30"
 });

@@ -38,10 +38,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const currentUser = authApi.getCurrentUser();
 
         if (isAuth && currentUser) {
-          setUser(currentUser);
+          // Ensure user has a role, fallback to business-user if none
+          const userWithRole = {
+            ...currentUser,
+            role: currentUser.role || 'business-user'
+          };
+          setUser(userWithRole);
         }
       } catch (error) {
-        console.error("Auth initialization error:", error);
+        // Handle auth initialization error
         // Clear invalid tokens5
         authApi.logout();
       } finally {
@@ -63,11 +68,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.login(credentials);
 
       if (response.success && response.data.user) {
-        // Get the complete user object from localStorage (now includes role)
-        const completeUser = authApi.getCurrentUser();
-        setUser(completeUser);
+        // Create user object with role information from response
+        const userWithRole = {
+          ...response.data.user,
+          role: response.data.user.role || response.data.role, // Use role from user object first
+          availableRoles: response.data.user.availableRoles || response.data.availableRoles || [],
+          appIdentifier: response.data.user.appIdentifier || response.data.appIdentifier,
+          authMethod: response.data.user.authMethod || response.data.authMethod
+        };
+        
+        setUser(userWithRole);
         localStorage.setItem("isLoggedIn", "true");
-        // Tokens are already stored by the auth service
+        // Store the complete user object with role
+        localStorage.setItem("user", JSON.stringify(userWithRole));
       }
 
       return response;
@@ -91,14 +104,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Create user object with role information from response
         const userWithRole = {
           ...response.data.user,
-          role: response.data.role,
-          availableRoles: response.data.availableRoles,
-          appIdentifier: response.data.appIdentifier,
-          authMethod: response.data.authMethod
+          role: response.data.user.role || response.data.role, // Use role from user object first
+          availableRoles: response.data.user.availableRoles || response.data.availableRoles || [],
+          appIdentifier: response.data.user.appIdentifier || response.data.appIdentifier,
+          authMethod: response.data.user.authMethod || response.data.authMethod
         };
+        
         setUser(userWithRole);
         localStorage.setItem("isLoggedIn", "true");
-        // Tokens are already stored by the auth service
+        // Store the complete user object with role
+        localStorage.setItem("user", JSON.stringify(userWithRole));
       }
 
       return response;
@@ -116,7 +131,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
       await authApi.logout();
     } catch (error) {
-      console.error("Logout error:", error);
+      // Handle logout error
     } finally {
       handleLogout();
     }

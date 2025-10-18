@@ -31,13 +31,32 @@ export class AuthService {
 
         if (response.success && response.data?.user) {
             // Store complete user object with role information
+            // Check if role is in appRegistered array for this app
+            let userRole = response.data.role;
+            
+            if (!userRole && response.data.user.appRegistered) {
+                const currentApp = response.data.user.appRegistered.find(
+                    (app: any) => app.appIdentifier === credentials.appEndpoint || 
+                    app.appIdentifier === 'food-delivery-business-app-sera'
+                );
+                if (currentApp && currentApp.roles && currentApp.roles.length > 0) {
+                    userRole = currentApp.roles[0]; // Use first role for this app
+                }
+            }
+            
+            // If still no role, use the selectedRole from the request
+            if (!userRole) {
+                userRole = credentials.selectedRole;
+            }
+            
             const completeUser = {
                 ...response.data.user,
-                role: response.data.role,
+                role: userRole,
                 availableRoles: response.data.availableRoles,
                 appIdentifier: response.data.appIdentifier,
                 authMethod: response.data.authMethod
             };
+            
             setUserData(completeUser);
         }
 
@@ -49,7 +68,7 @@ export class AuthService {
         try {
             clearAuthData();
         } catch (error) {
-            console.error("Logout failed:", error);
+            // Handle logout failure
         }
 
         return { success: true, message: "Logged out successfully" };

@@ -1,8 +1,8 @@
 import { Activity } from "../types/activities";
+import { getApiUrl, isDevelopment } from "../config/apiConfig";
 
 // Activities API Configuration
-const ACTIVITIES_API_BASE_URL =
-  "https://food-delivery-business-app-sera-bac.vercel.app";
+const ACTIVITIES_API_BASE_URL = getApiUrl('backend');
 
 // Activities API Client
 class ActivitiesApiClient {
@@ -38,9 +38,37 @@ class ActivitiesApiClient {
 
       return data;
     } catch (error) {
-      console.error("Activities API request failed:", error);
+      // Handle activities API request failure
+      if (isDevelopment()) {
+        // Return mock data in development if API fails
+        return this.getMockData(endpoint) as T;
+      }
       throw error;
     }
+  }
+
+  private getMockData(endpoint: string): any {
+    // Return mock data for development
+    if (endpoint.includes('/admin')) {
+      return {
+        activities: [
+          {
+            id: '1',
+            type: 'user_registration',
+            description: 'New user registered',
+            timestamp: new Date().toISOString(),
+            metadata: { userId: '123', email: 'user@example.com' }
+          }
+        ],
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+          totalItems: 1,
+          itemsPerPage: 20
+        }
+      };
+    }
+    return { activities: [], pagination: { currentPage: 1, totalPages: 0, totalItems: 0, itemsPerPage: 20 } };
   }
 
   // Get admin activities

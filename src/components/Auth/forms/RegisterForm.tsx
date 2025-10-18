@@ -57,7 +57,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         onSuccess();
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      // Handle registration error
     }
   };
 

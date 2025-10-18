@@ -5,7 +5,7 @@ import { ApiError } from './types';
 
 /** * Handle API errors with consistent formatting */
 export const handleApiError = (error: any): ApiError => {
-  console.error('API Error:', error);
+  // Handle API error
   
   if (error instanceof Error) {
     return {

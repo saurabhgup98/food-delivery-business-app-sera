@@ -1,5 +1,5 @@
-export { default as PrimarySolidBtn } from './PrimarySolidBtn';
 export { default as PrimarySubmitBtn } from './PrimarySubmitBtn';
-export { default as OutlineTextBtn } from './OutlineBtn';
-export { buttonData } from './buttonData';
-export type { PrimarySolidBtnProps } from './buttonData';
+export { default as PrimaryIconTextBtn } from './PrimaryIconTextBtn';
+export { default as PrimaryIconBtn } from './PrimaryIconBtn';
+export { default as SecondarySearchButton } from './SecondarySearchButton';
+export { default as PrimarySelectBtn } from './PrimarySelectBtn';

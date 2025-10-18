@@ -1,4 +1,5 @@
 import React from 'react';
+import { BUTTON_STYLES } from '../styles/buttonStyles';
 
 interface PrimaryIconBtnProps {
     icon: React.ComponentType;
@@ -16,18 +17,18 @@ interface PrimaryIconBtnProps {
 
 export const PrimaryIconBtn: React.FC<PrimaryIconBtnProps> = ({
     icon: Icon,
-    iconColor = 'text-white',
+    iconColor = BUTTON_STYLES.colors.icon.white,
     iconHoverColor = iconColor,
     isSolid = false,
-    bgColor = isSolid ? 'bg-sera-blue' : 'bg-transparent',
-    hoverBgColor = isSolid ? `${bgColor}/80` : 'bg-white/30',
-    border = 'border-none',
-    borderHoverColor = 'border-none',
+    bgColor = isSolid ? BUTTON_STYLES.colors.solid.primary : BUTTON_STYLES.colors.transparent.primary,
+    hoverBgColor = isSolid ? `${bgColor}/80` : BUTTON_STYLES.colors.transparent.primary,
+    border = BUTTON_STYLES.borders.none,
+    borderHoverColor = BUTTON_STYLES.borders.none,
     className = '',
     onClick,
     disabled = false
 }) => {
-    const baseClasses = `w-full h-full flex items-center justify-center rounded-lg transition-all duration-200 ${border} ${bgColor} hover:${hoverBgColor} ${iconColor} hover:${iconHoverColor} hover:${borderHoverColor} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 cursor-pointer'}`;
+    const baseClasses = `${BUTTON_STYLES.base.container} ${border} ${bgColor} hover:${hoverBgColor} ${iconColor} hover:${iconHoverColor} hover:${borderHoverColor} ${className} ${disabled ? BUTTON_STYLES.base.disabled : BUTTON_STYLES.base.enabled}`;
 
     return (
         <button

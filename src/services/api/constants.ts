@@ -1,6 +1,7 @@
 // API Constants - Centralized configuration and endpoints
+import { getApiUrl } from '../../config/apiConfig';
 
-export const API_BASE_URL = 'https://simple-authentication-service.vercel.app';
+export const API_BASE_URL = getApiUrl('auth');
 
 export const API_ENDPOINTS = {
   // Auth endpoints

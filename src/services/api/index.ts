@@ -4,8 +4,8 @@ import { HttpClient } from './httpClient';
 import { AuthService } from './auth';
 import { OAuthService } from './oauth';
 import { API_BASE_URL } from './constants';
-import { 
-  LoginRequest, 
+import {
+  LoginRequest,
   RegisterRequest
 } from './types';
 
@@ -47,7 +47,7 @@ export const oauthApi = {
   getGoogleAuthUrl: () => apiClient.oauth.getGoogleAuthUrl(),
   getFacebookAuthUrl: () => apiClient.oauth.getFacebookAuthUrl(),
   getGithubAuthUrl: () => apiClient.oauth.getGithubAuthUrl(),
-  handleOAuthCallback: (provider: string, code: string) => 
+  handleOAuthCallback: (provider: string, code: string) =>
     apiClient.oauth.handleOAuthCallback(provider, code),
 };
 

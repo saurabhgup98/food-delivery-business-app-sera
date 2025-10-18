@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BUTTON_STYLES } from '../styles/buttonStyles';
 
 interface SecondarySearchButtonProps {
   placeholder?: string;
@@ -19,7 +20,7 @@ export const SecondarySearchButton: React.FC<SecondarySearchButtonProps> = ({
   placeholder = 'Search...',
   placeholderColor = 'placeholder-gray-400',
   icon: Icon,
-  iconColor = 'text-gray-400',
+  iconColor = BUTTON_STYLES.colors.icon.gray,
   inputBg = 'bg-white/10',
   inputHoverBg = 'hover:bg-white/15',
   border = 'border-none',
@@ -43,7 +44,7 @@ export const SecondarySearchButton: React.FC<SecondarySearchButtonProps> = ({
     }
   };
 
-  const baseClasses = `w-full h-full flex items-center rounded-lg transition-all duration-300 ${border} ${borderColor} hover:${borderHoverColor} ${inputBg} ${inputHoverBg} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`;
+  const baseClasses = `${BUTTON_STYLES.base.container} transition-all duration-300 ${border} ${borderColor} hover:${borderHoverColor} ${inputBg} ${inputHoverBg} ${className} ${disabled ? BUTTON_STYLES.base.disabled : BUTTON_STYLES.base.enabled}`;
 
   return (
     <div className={baseClasses}>
@@ -54,12 +55,12 @@ export const SecondarySearchButton: React.FC<SecondarySearchButtonProps> = ({
         onKeyPress={handleKeyPress}
         placeholder={placeholder}
         disabled={disabled}
-        className={`flex-1 px-3 py-2 bg-transparent text-white ${placeholderColor} focus:outline-none focus:ring-0 border-none`}
+        className={`flex-1 ${BUTTON_STYLES.padding.small} bg-transparent text-white ${placeholderColor} focus:outline-none focus:ring-0 border-none`}
       />
       <button
         onClick={handleSearch}
         disabled={disabled || !searchTerm.trim()}
-        className={`px-3 py-2 ${iconColor} hover:${iconColor.replace('text-', 'text-')} transition-all duration-200 ${disabled || !searchTerm.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'}`}
+        className={`${BUTTON_STYLES.padding.small} ${iconColor} hover:${iconColor.replace('text-', 'text-')} transition-all duration-200 ${disabled || !searchTerm.trim() ? BUTTON_STYLES.base.disabled : 'hover:scale-110'}`}
       >
         <Icon />
       </button>

@@ -14,13 +14,6 @@ export const ROLE_SELECTION_FORM_CONFIG = {
       color: 'bg-sera-blue/10 border-sera-blue/30 text-sera-blue'
     },
     {
-      id: 'admin',
-      title: 'Platform Admin',
-      description: 'Manage restaurants, users, and platform settings',
-      icon: '⚙️',
-      color: 'bg-sera-yellow/10 border-sera-yellow/30 text-sera-yellow'
-    },
-    {
       id: 'superadmin',
       title: 'Super Admin',
       description: 'Full system access and management',

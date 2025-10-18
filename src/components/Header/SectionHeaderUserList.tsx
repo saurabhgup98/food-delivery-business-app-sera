@@ -8,7 +8,7 @@ interface SectionHeaderUsersProps {
   className?: string;
 }
 
-const SectionHeaderUsers: React.FC<SectionHeaderUsersProps> = ({
+const SectionHeaderUserList: React.FC<SectionHeaderUsersProps> = ({
   totalUsers,
   searchTerm,
   onSearchChange,
@@ -69,4 +69,4 @@ const SectionHeaderUsers: React.FC<SectionHeaderUsersProps> = ({
   );
 };
 
-export default SectionHeaderUsers;
+export default SectionHeaderUserList;

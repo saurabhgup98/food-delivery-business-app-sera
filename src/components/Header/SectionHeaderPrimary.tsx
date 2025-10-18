@@ -20,7 +20,7 @@ const SectionHeaderPrimary: React.FC<SectionHeaderPrimaryProps> = ({
 
     // Validation: Both rightSideContent and rightSideAction cannot be provided
     if (rightSideContent && rightSideAction) {
-        console.warn('SectionHeaderPrimary: Both rightSideContent and rightSideAction cannot be provided. Only one should be used.');
+        // Warning: Both rightSideContent and rightSideAction cannot be provided. Only one should be used.
     }
 
     return (

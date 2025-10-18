@@ -24,11 +24,6 @@ export const LOGIN_FORM_CONFIG = {
       icon: '🏪', 
       description: 'Manage your restaurant and orders' 
     },
-    'admin': { 
-      title: 'Platform Admin', 
-      icon: '⚙️', 
-      description: 'Manage restaurants, users, and platform settings' 
-    },
     'superadmin': { 
       title: 'Super Admin', 
       icon: '👑', 

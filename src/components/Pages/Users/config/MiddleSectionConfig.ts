@@ -9,7 +9,6 @@ export const createUsersHeaderConfig = (totalUsers: number) => ({
 // Function to create metrics cards configuration
 export const createMetricsCardsConfig = (metrics: UserMetrics[]) => {
   return metrics.map((metric) => ({
-    ...metric,
-    className: "bg-gradient-to-br from-dark-800/95 via-dark-700/90 to-dark-600/85 border border-sera-pink/30 rounded-xl p-4 backdrop-blur-sm shadow-xl shadow-sera-pink/10 hover:shadow-sera-pink/20 transition-all duration-300 hover:scale-105"
+    ...metric
   }));
 };

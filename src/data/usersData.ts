@@ -29,6 +29,7 @@ export interface UserActivity {
 export interface UserMetrics {
   title: string;
   value: string;
+  onlineValue?: string;
   change: string;
   changeType: 'positive' | 'negative' | 'neutral';
   icon: string;
@@ -52,10 +53,10 @@ export interface UsersData {
 
 export const mockUsersData: UsersData = {
   metrics: [
-    { title: 'Total Users', value: '2,340', change: '+12%', changeType: 'positive', icon: '👥' },
-    { title: 'Active Users', value: '1,890', change: '+8%', changeType: 'positive', icon: '✅' },
-    { title: 'New This Week', value: '156', change: '+15%', changeType: 'positive', icon: '🆕' },
-    { title: 'Suspended', value: '23', change: '-2%', changeType: 'negative', icon: '⚠️' }
+    { title: 'Total Users', value: '2,340', onlineValue: '1,890', change: '+12%', changeType: 'positive', icon: '👥' },
+    { title: 'Customers', value: '2,156', onlineValue: '1,234', change: '+15%', changeType: 'positive', icon: '🛒' },
+    { title: 'Restaurant Partners', value: '89', onlineValue: '67', change: '+5%', changeType: 'positive', icon: '🏪' },
+    { title: 'Admin Users', value: '8', onlineValue: '3', change: '0%', changeType: 'neutral', icon: '👑' }
   ],
   activities: [
     { id: '1', type: 'registration', title: 'New user "John Doe" registered', description: 'User account created successfully', time: '2 minutes ago', status: 'completed', userId: '1', userName: 'John Doe' },

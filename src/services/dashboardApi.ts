@@ -1,7 +1,8 @@
 import { MetricCard } from '../data/dashboardData';
+import { getApiUrl, isDevelopment } from '../config/apiConfig';
 
 // Dashboard API Configuration
-const DASHBOARD_API_BASE_URL = 'https://food-delivery-business-app-sera-bac.vercel.app'; // Vercel backend URL
+const DASHBOARD_API_BASE_URL = getApiUrl('backend');
 
 // Dashboard API Client
 class DashboardApiClient {
@@ -35,9 +36,27 @@ class DashboardApiClient {
 
       return data;
     } catch (error) {
-      console.error('Dashboard API request failed:', error);
+      // Handle dashboard API request failure
+      if (isDevelopment()) {
+        // Return mock data in development if API fails
+        return this.getMockData(endpoint) as T;
+      }
       throw error;
     }
+  }
+
+  private getMockData(endpoint: string): any {
+    // Return mock data for development
+    if (endpoint.includes('/revenue')) {
+      return {
+        title: 'Total Revenue',
+        value: '$45,230',
+        change: '+12.5%',
+        changeType: 'positive',
+        icon: '💰'
+      };
+    }
+    return { title: 'Mock Data', value: '0', change: '0%', changeType: 'neutral', icon: '📊' };
   }
 
   // Get total revenue

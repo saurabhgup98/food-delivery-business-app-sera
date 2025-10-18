@@ -1,4 +1,5 @@
 import React from 'react';
+import { BUTTON_STYLES } from '../styles/buttonStyles';
 
 interface PrimaryIconTextBtnProps {
   text: string;
@@ -24,22 +25,22 @@ export const PrimaryIconTextBtn: React.FC<PrimaryIconTextBtnProps> = ({
   text,
   leftIcon: LeftIcon,
   rightIcon: RightIcon,
-  leftIconColor = 'text-white',
+  leftIconColor = BUTTON_STYLES.colors.icon.white,
   leftIconHoverColor = leftIconColor,
-  rightIconColor = 'text-white',
+  rightIconColor = BUTTON_STYLES.colors.icon.white,
   rightIconHoverColor = rightIconColor,
   isSolid = false,
-  bgColor = isSolid ? 'bg-sera-blue' : 'bg-transparent',
-  hoverBgColor = isSolid ? `${bgColor}/80` : 'bg-white/30',
-  border = 'border-none',
-  borderHoverColor = 'border-none',
-  textColor = 'text-white',
+  bgColor = isSolid ? BUTTON_STYLES.colors.solid.primary : BUTTON_STYLES.colors.transparent.primary,
+  hoverBgColor = isSolid ? `${bgColor}/80` : BUTTON_STYLES.colors.transparent.primary,
+  border = BUTTON_STYLES.borders.none,
+  borderHoverColor = BUTTON_STYLES.borders.none,
+  textColor = BUTTON_STYLES.colors.text.white,
   textHoverColor = textColor,
   className = '',
   onClick,
   disabled = false
 }) => {
-  const baseClasses = `w-full h-full flex items-center justify-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 font-medium ${border} ${bgColor} hover:${hoverBgColor} ${textColor} hover:${textHoverColor} hover:${borderHoverColor} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`;
+  const baseClasses = `${BUTTON_STYLES.base.container} ${BUTTON_STYLES.icon.space} ${BUTTON_STYLES.padding.small} ${border} ${bgColor} hover:${hoverBgColor} ${textColor} hover:${textHoverColor} hover:${borderHoverColor} ${className} ${disabled ? BUTTON_STYLES.base.disabled : BUTTON_STYLES.base.enabled}`;
 
   return (
     <button
@@ -48,13 +49,13 @@ export const PrimaryIconTextBtn: React.FC<PrimaryIconTextBtnProps> = ({
       className={baseClasses}
     >
       {LeftIcon && (
-        <div className={`${leftIconColor} hover:${leftIconHoverColor} transition-colors duration-200 flex-shrink-0`}>
+        <div className={`${leftIconColor} hover:${leftIconHoverColor} transition-colors duration-200 ${BUTTON_STYLES.icon.icon}`}>
           <LeftIcon />
         </div>
       )}
-      <span className="font-medium whitespace-nowrap">{text}</span>
+      <span className={`font-medium ${BUTTON_STYLES.icon.text}`}>{text}</span>
       {RightIcon && (
-        <div className={`${rightIconColor} hover:${rightIconHoverColor} transition-colors duration-200 flex-shrink-0`}>
+        <div className={`${rightIconColor} hover:${rightIconHoverColor} transition-colors duration-200 ${BUTTON_STYLES.icon.icon}`}>
           <RightIcon />
         </div>
       )}

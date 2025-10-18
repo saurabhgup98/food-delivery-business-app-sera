@@ -76,7 +76,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, selectedRole, o
         onSuccess();
       }
     } catch (error) {
-      console.error('Login error:', error);
+      // Handle login error
     }
   };
 

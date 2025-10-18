@@ -38,7 +38,7 @@ const AdminConsole: React.FC = () => {
       const data = await response.json();
       setUsers(data.users || []);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      // Handle error fetching users
       // Mock data for now
       setUsers([
         {
@@ -96,7 +96,7 @@ const AdminConsole: React.FC = () => {
         await fetchUsers(); // Refresh the list
       }
     } catch (error) {
-      console.error('Error promoting user:', error);
+      // Handle error promoting user
     }
   };
 
@@ -114,7 +114,7 @@ const AdminConsole: React.FC = () => {
         await fetchUsers(); // Refresh the list
       }
     } catch (error) {
-      console.error('Error removing admin access:', error);
+      // Handle error removing admin access
     }
   };
 
@@ -133,7 +133,7 @@ const AdminConsole: React.FC = () => {
         await fetchUsers(); // Refresh the list
       }
     } catch (error) {
-      console.error('Error creating admin:', error);
+      // Handle error creating admin
     }
   };
 

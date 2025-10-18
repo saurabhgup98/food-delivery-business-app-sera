@@ -4,14 +4,13 @@ import {
   XIcon
 } from '../../assets/Icons';
 import PrimaryIconTextBtn from '../Buttons/PrimaryIconTextBtn';
-import { LoginIcon } from '../../assets/LoginIcon';
-import { UserPlusIcon } from '../../assets/UserPlusIcon';
+import { getLoginButtonProps, getRegisterButtonProps } from '../utils/buttonUtils';
 import PrimaryHorizontalNavbar from './PrimaryHorizontalNavbar';
 import { headerData } from './headerData';
-import Logo from './Logo';
+import Logo from '../others/Logo';
 import PrimarySearchBar from './PrimarySearchBar';
 import NotificationsDropdown from './NotificationsDropdown';
-import AdminProfile from './AdminProfile';
+import AdminProfile from '../others/AccountMenu';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface HeaderProps {
@@ -52,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({
       await logout();
       onLogout?.(); // Call the parent logout handler
     } catch (error) {
-      console.error('Logout failed:', error);
+      // Handle logout error
     }
   };
 
@@ -66,9 +65,9 @@ const Header: React.FC<HeaderProps> = ({
     setShowAuthModal?.(true);
   };
 
-  // Debug effect to log authentication state changes
+  // Authentication state effect
   useEffect(() => {
-    console.log('Header authentication state changed:', { isAuthenticated, user });
+    // Handle authentication state changes
   }, [isAuthenticated, user]);
 
   const handleNavClick = (itemName: string) => {
@@ -121,25 +120,10 @@ const Header: React.FC<HeaderProps> = ({
               /* Non-logged User: Show only Login/Register buttons */
               <div className="flex items-center space-x-3">
                 <div className="w-20 h-9">
-                  <PrimaryIconTextBtn
-                    text="Login"
-                    onClick={handleLogin}
-                    bgColor="bg-pink-200/30"
-                    hoverBgColor="hover:bg-pink-200/40"
-                    textColor="text-white"
-                    className="text-sm font-medium"
-                  />
+                  <PrimaryIconTextBtn {...getLoginButtonProps(handleLogin)} />
                 </div>
                 <div className="w-24 h-9">
-                  <PrimaryIconTextBtn
-                    text="Register"
-                    onClick={handleRegister}
-                    isSolid={true}
-                    bgColor="bg-yellow-400"
-                    hoverBgColor="hover:bg-yellow-500"
-                    textColor="text-black"
-                    className="text-sm font-medium"
-                  />
+                  <PrimaryIconTextBtn {...getRegisterButtonProps(handleRegister)} />
                 </div>
               </div>
             ) : (
